@@ -9,5 +9,13 @@
   <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.3" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="../OSN.Application/OSN.Application.csproj"/>
+    <ProjectReference Include="../OSN.Domain/OSN.Domain.csproj"/>
+    <ProjectReference Include="../OSN.Persistence/OSN.Persistence.csproj"/>
+  </ItemGroup>
+  
+  
 
 </Project>

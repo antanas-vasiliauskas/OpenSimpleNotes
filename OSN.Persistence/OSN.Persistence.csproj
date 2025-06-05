@@ -5,5 +5,14 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="EntityFramework" Version="6.5.1"/>
+  </ItemGroup>
+  
+  
+  <ItemGroup>
+    <ProjectReference Include="..\OSN.Domain\OSN.Domain.csproj"/>
+  </ItemGroup>
 
 </Project>
