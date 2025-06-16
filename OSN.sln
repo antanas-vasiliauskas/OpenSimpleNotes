@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OSN.Domain", "OSN.Domain\OS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OSN.Persistence", "OSN.Persistence\OSN.Persistence.csproj", "{3451921F-C146-4726-BA16-24D81422B5BA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OSN.Infrastructure", "OSN.Infrastructure\OSN.Infrastructure.csproj", "{87137B3C-9539-41B3-88DB-49E003D6D09B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{3451921F-C146-4726-BA16-24D81422B5BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3451921F-C146-4726-BA16-24D81422B5BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3451921F-C146-4726-BA16-24D81422B5BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87137B3C-9539-41B3-88DB-49E003D6D09B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87137B3C-9539-41B3-88DB-49E003D6D09B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87137B3C-9539-41B3-88DB-49E003D6D09B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87137B3C-9539-41B3-88DB-49E003D6D09B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -23,15 +23,6 @@
 msbuild.log
 *.log
 
-## Docker
-**/Dockerfile*
-**/.dockerignore
-docker-compose*
-docker-compose.override.yml
-.env
-**/docker-compose.*
-**/docker-data/
-.docker/
 
 ## Node/React frontend
 **/node_modules/
