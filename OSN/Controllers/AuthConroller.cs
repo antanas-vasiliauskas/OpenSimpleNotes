@@ -23,14 +23,11 @@ public class AuthController : ControllerBase
     }
 
 
-
-    private const string EntityName = "auth";
-
-    [HttpPost($"/{EntityName}/generate-token")]
+    [HttpPost($"login")]
     [ExcludeHeader]
     [SwaggerRequestType(typeof(LoginRequest))]
     [SwaggerResponse(StatusCodes.Status200OK, "Token successfully generated.", typeof(LoginResponse))]
-    public async Task<IActionResult> GenerateToken([FromBody] LoginRequest request)
+    public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
         var command = new LoginCommand(request);
 

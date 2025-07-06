@@ -13,5 +13,6 @@ public static class ServiceExtensions
         services.AddDbContext<AppDbContext>(options => options.UseLazyLoadingProxies().UseNpgsql(connectionString, npgsqlOptions));
 
         services.AddScoped<IUsersRepository, UsersRepository>();
+        services.AddScoped<INotesRepository, NotesRepository>();
     }
 }

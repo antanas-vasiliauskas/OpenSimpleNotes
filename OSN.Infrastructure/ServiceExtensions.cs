@@ -27,10 +27,11 @@ public static class ServiceExtensions
 
         services.AddSingleton<IHttpContentResolver, HttpContentResolver>();
         services.AddSingleton<ITokenService, TokenService>();
+        services.AddScoped<IUserContext, HttpUserContext>();
 
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(LoginCommandHandler).Assembly));
         services.AddValidatorsFromAssembly(typeof(LoginCommandValidator).Assembly);
-        services.AddAutoMapper(typeof(ServiceExtensions).Assembly);
+        services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
         services.RegisterExceptionHandling();
         services.RegisterMappers();
@@ -51,6 +52,7 @@ public static class ServiceExtensions
     private static void RegisterMappers(this IServiceCollection services)
     {
         services.AddSingleton<IAuthModelsResolver, AuthModelsResolver>();
+        services.AddSingleton<INoteModelsResolver, NoteModelsResolver>();
     }
 
     private static void RegisterFactories(this IServiceCollection services)

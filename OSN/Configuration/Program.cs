@@ -7,6 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace OSN.Configuration;
 
+// test email: Lora.Kovacek86@yahoo.com password: password
+// id: 1219bcfe-cd48-4e7b-86b6-604909b0f1e8
+
 public class Program()
 {
     public static void Main(string[] args)
@@ -14,10 +17,10 @@ public class Program()
         var builder = WebApplication.CreateBuilder(args);
 
         builder.Services.AddControllers();
-        //builder.Services.AddCors(p => p.AddPolicy("corspolicy", build =>
-        //{
-        //    build.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
-        //}));
+        builder.Services.AddCors(p => p.AddPolicy("corspolicy", build =>
+        {
+            build.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+        }));
         builder.Services.AddSwaggerGen(c =>
         {
             c.OperationFilter<SwaggerRequestTypeOperationFilter>();

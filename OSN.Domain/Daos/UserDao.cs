@@ -19,14 +19,8 @@ public record UserDao
     [Column(TypeName = "smallint")]
     public UserRole Role { get; init; }
 
-    //public Guid BusinessId { get; init; }
-
     public bool IsDeleted { get; init; }
 
 
-    //public virtual BusinessDao Business { get; init; } = null!;
-    //public virtual ICollection<ReservationDao> Reservations { get; init; } = [];
-    //public virtual ICollection<RefundDao> Refunds { get; init; } = [];
-    //public virtual ICollection<GiftCardDao> GiftCards { get; init; } = [];
-    //public virtual ICollection<OrderDao> Orders { get; init; } = [];
+    public virtual ICollection<NoteDao> Notes { get; init; } = [];
 }
