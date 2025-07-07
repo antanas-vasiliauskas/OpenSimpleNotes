@@ -1,0 +1,275 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\av\\Desktop\\OpenSimpleNotes\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{87137B3C-9539-41B3-88DB-49E003D6D09B}|OSN.Infrastructure\\OSN.Infrastructure.csproj|c:\\users\\av\\desktop\\opensimplenotes\\osn.infrastructure\\services\\httpusercontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{87137B3C-9539-41B3-88DB-49E003D6D09B}|OSN.Infrastructure\\OSN.Infrastructure.csproj|solutionrelative:osn.infrastructure\\services\\httpusercontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{87137B3C-9539-41B3-88DB-49E003D6D09B}|OSN.Infrastructure\\OSN.Infrastructure.csproj|c:\\users\\av\\desktop\\opensimplenotes\\osn.infrastructure\\services\\tokenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{87137B3C-9539-41B3-88DB-49E003D6D09B}|OSN.Infrastructure\\OSN.Infrastructure.csproj|solutionrelative:osn.infrastructure\\services\\tokenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{87137B3C-9539-41B3-88DB-49E003D6D09B}|OSN.Infrastructure\\OSN.Infrastructure.csproj|c:\\users\\av\\desktop\\opensimplenotes\\osn.infrastructure\\utilities\\behaviours\\authenticationbehaviour.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{87137B3C-9539-41B3-88DB-49E003D6D09B}|OSN.Infrastructure\\OSN.Infrastructure.csproj|solutionrelative:osn.infrastructure\\utilities\\behaviours\\authenticationbehaviour.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{46862FA4-5637-428A-BB65-23319B37B662}|OSN.Application\\OSN.Application.csproj|c:\\users\\av\\desktop\\opensimplenotes\\osn.application\\features\\notes\\orders\\getnote\\getnotequery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{46862FA4-5637-428A-BB65-23319B37B662}|OSN.Application\\OSN.Application.csproj|solutionrelative:osn.application\\features\\notes\\orders\\getnote\\getnotequery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{46862FA4-5637-428A-BB65-23319B37B662}|OSN.Application\\OSN.Application.csproj|c:\\users\\av\\desktop\\opensimplenotes\\osn.application\\features\\notes\\orders\\getnotes\\getnotesquery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{46862FA4-5637-428A-BB65-23319B37B662}|OSN.Application\\OSN.Application.csproj|solutionrelative:osn.application\\features\\notes\\orders\\getnotes\\getnotesquery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{46862FA4-5637-428A-BB65-23319B37B662}|OSN.Application\\OSN.Application.csproj|c:\\users\\av\\desktop\\opensimplenotes\\osn.application\\models\\dtos\\tokendatadto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{46862FA4-5637-428A-BB65-23319B37B662}|OSN.Application\\OSN.Application.csproj|solutionrelative:osn.application\\models\\dtos\\tokendatadto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DC55F991-4FAA-4F05-9A77-B4C85D92119C}|OSN\\OSN.csproj|c:\\users\\av\\desktop\\opensimplenotes\\osn\\controllers\\notescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC55F991-4FAA-4F05-9A77-B4C85D92119C}|OSN\\OSN.csproj|solutionrelative:osn\\controllers\\notescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DC55F991-4FAA-4F05-9A77-B4C85D92119C}|OSN\\OSN.csproj|c:\\users\\av\\desktop\\opensimplenotes\\osn\\controllers\\authconroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC55F991-4FAA-4F05-9A77-B4C85D92119C}|OSN\\OSN.csproj|solutionrelative:osn\\controllers\\authconroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3451921F-C146-4726-BA16-24D81422B5BA}|OSN.Persistence\\OSN.Persistence.csproj|c:\\users\\av\\desktop\\opensimplenotes\\osn.persistence\\repositories\\notesrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3451921F-C146-4726-BA16-24D81422B5BA}|OSN.Persistence\\OSN.Persistence.csproj|solutionrelative:osn.persistence\\repositories\\notesrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DC55F991-4FAA-4F05-9A77-B4C85D92119C}|OSN\\OSN.csproj|c:\\users\\av\\desktop\\opensimplenotes\\osn\\configuration\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC55F991-4FAA-4F05-9A77-B4C85D92119C}|OSN\\OSN.csproj|solutionrelative:osn\\configuration\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{87137B3C-9539-41B3-88DB-49E003D6D09B}|OSN.Infrastructure\\OSN.Infrastructure.csproj|c:\\users\\av\\desktop\\opensimplenotes\\osn.infrastructure\\serviceextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{87137B3C-9539-41B3-88DB-49E003D6D09B}|OSN.Infrastructure\\OSN.Infrastructure.csproj|solutionrelative:osn.infrastructure\\serviceextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3451921F-C146-4726-BA16-24D81422B5BA}|OSN.Persistence\\OSN.Persistence.csproj|c:\\users\\av\\desktop\\opensimplenotes\\osn.persistence\\serviceextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3451921F-C146-4726-BA16-24D81422B5BA}|OSN.Persistence\\OSN.Persistence.csproj|solutionrelative:osn.persistence\\serviceextensions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{46862FA4-5637-428A-BB65-23319B37B662}|OSN.Application\\OSN.Application.csproj|c:\\users\\av\\desktop\\opensimplenotes\\osn.application\\mappings\\modelsresolvers\\authmodelsresolver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{46862FA4-5637-428A-BB65-23319B37B662}|OSN.Application\\OSN.Application.csproj|solutionrelative:osn.application\\mappings\\modelsresolvers\\authmodelsresolver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{46862FA4-5637-428A-BB65-23319B37B662}|OSN.Application\\OSN.Application.csproj|c:\\users\\av\\desktop\\opensimplenotes\\osn.application\\mappings\\modelsresolvers\\notemodelsresolver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{46862FA4-5637-428A-BB65-23319B37B662}|OSN.Application\\OSN.Application.csproj|solutionrelative:osn.application\\mappings\\modelsresolvers\\notemodelsresolver.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{46862FA4-5637-428A-BB65-23319B37B662}|OSN.Application\\OSN.Application.csproj|c:\\users\\av\\desktop\\opensimplenotes\\osn.application\\mappings\\profiles\\noteprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{46862FA4-5637-428A-BB65-23319B37B662}|OSN.Application\\OSN.Application.csproj|solutionrelative:osn.application\\mappings\\profiles\\noteprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "HttpUserContext.cs",
+              "DocumentMoniker": "C:\\Users\\av\\Desktop\\OpenSimpleNotes\\OSN.Infrastructure\\Services\\HttpUserContext.cs",
+              "RelativeDocumentMoniker": "OSN.Infrastructure\\Services\\HttpUserContext.cs",
+              "ToolTip": "C:\\Users\\av\\Desktop\\OpenSimpleNotes\\OSN.Infrastructure\\Services\\HttpUserContext.cs",
+              "RelativeToolTip": "OSN.Infrastructure\\Services\\HttpUserContext.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAYwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-07T05:14:40.302Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "TokenService.cs",
+              "DocumentMoniker": "C:\\Users\\av\\Desktop\\OpenSimpleNotes\\OSN.Infrastructure\\Services\\TokenService.cs",
+              "RelativeDocumentMoniker": "OSN.Infrastructure\\Services\\TokenService.cs",
+              "ToolTip": "C:\\Users\\av\\Desktop\\OpenSimpleNotes\\OSN.Infrastructure\\Services\\TokenService.cs",
+              "RelativeToolTip": "OSN.Infrastructure\\Services\\TokenService.cs",
+              "ViewState": "AgIAAEkAAAAAAAAAAAAuwFcAAAA7AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-07T05:14:36.087Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "TokenDataDto.cs",
+              "DocumentMoniker": "C:\\Users\\av\\Desktop\\OpenSimpleNotes\\OSN.Application\\Models\\Dtos\\TokenDataDto.cs",
+              "RelativeDocumentMoniker": "OSN.Application\\Models\\Dtos\\TokenDataDto.cs",
+              "ToolTip": "C:\\Users\\av\\Desktop\\OpenSimpleNotes\\OSN.Application\\Models\\Dtos\\TokenDataDto.cs",
+              "RelativeToolTip": "OSN.Application\\Models\\Dtos\\TokenDataDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-06T22:43:46.234Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "GetNotesQuery.cs",
+              "DocumentMoniker": "C:\\Users\\av\\Desktop\\OpenSimpleNotes\\OSN.Application\\Features\\Notes\\Orders\\GetNotes\\GetNotesQuery.cs",
+              "RelativeDocumentMoniker": "OSN.Application\\Features\\Notes\\Orders\\GetNotes\\GetNotesQuery.cs",
+              "ToolTip": "C:\\Users\\av\\Desktop\\OpenSimpleNotes\\OSN.Application\\Features\\Notes\\Orders\\GetNotes\\GetNotesQuery.cs",
+              "RelativeToolTip": "OSN.Application\\Features\\Notes\\Orders\\GetNotes\\GetNotesQuery.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-06T22:35:57.798Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "GetNoteQuery.cs",
+              "DocumentMoniker": "C:\\Users\\av\\Desktop\\OpenSimpleNotes\\OSN.Application\\Features\\Notes\\Orders\\GetNote\\GetNoteQuery.cs",
+              "RelativeDocumentMoniker": "OSN.Application\\Features\\Notes\\Orders\\GetNote\\GetNoteQuery.cs",
+              "ToolTip": "C:\\Users\\av\\Desktop\\OpenSimpleNotes\\OSN.Application\\Features\\Notes\\Orders\\GetNote\\GetNoteQuery.cs",
+              "RelativeToolTip": "OSN.Application\\Features\\Notes\\Orders\\GetNote\\GetNoteQuery.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-06T22:35:54.052Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "AuthenticationBehaviour.cs",
+              "DocumentMoniker": "C:\\Users\\av\\Desktop\\OpenSimpleNotes\\OSN.Infrastructure\\Utilities\\Behaviours\\AuthenticationBehaviour.cs",
+              "RelativeDocumentMoniker": "OSN.Infrastructure\\Utilities\\Behaviours\\AuthenticationBehaviour.cs",
+              "ToolTip": "C:\\Users\\av\\Desktop\\OpenSimpleNotes\\OSN.Infrastructure\\Utilities\\Behaviours\\AuthenticationBehaviour.cs",
+              "RelativeToolTip": "OSN.Infrastructure\\Utilities\\Behaviours\\AuthenticationBehaviour.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAsAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-06T21:52:50.284Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "AuthConroller.cs",
+              "DocumentMoniker": "C:\\Users\\av\\Desktop\\OpenSimpleNotes\\OSN\\Controllers\\AuthConroller.cs",
+              "RelativeDocumentMoniker": "OSN\\Controllers\\AuthConroller.cs",
+              "ToolTip": "C:\\Users\\av\\Desktop\\OpenSimpleNotes\\OSN\\Controllers\\AuthConroller.cs",
+              "RelativeToolTip": "OSN\\Controllers\\AuthConroller.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-06T19:31:07.875Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "NotesController.cs",
+              "DocumentMoniker": "C:\\Users\\av\\Desktop\\OpenSimpleNotes\\OSN\\Controllers\\NotesController.cs",
+              "RelativeDocumentMoniker": "OSN\\Controllers\\NotesController.cs",
+              "ToolTip": "C:\\Users\\av\\Desktop\\OpenSimpleNotes\\OSN\\Controllers\\NotesController.cs",
+              "RelativeToolTip": "OSN\\Controllers\\NotesController.cs",
+              "ViewState": "AgIAACwAAAAAAAAAAAAgwEUAAAA4AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-06T19:22:27.459Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "ServiceExtensions.cs",
+              "DocumentMoniker": "C:\\Users\\av\\Desktop\\OpenSimpleNotes\\OSN.Infrastructure\\ServiceExtensions.cs",
+              "RelativeDocumentMoniker": "OSN.Infrastructure\\ServiceExtensions.cs",
+              "ToolTip": "C:\\Users\\av\\Desktop\\OpenSimpleNotes\\OSN.Infrastructure\\ServiceExtensions.cs",
+              "RelativeToolTip": "OSN.Infrastructure\\ServiceExtensions.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-06T18:06:18.419Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "NotesRepository.cs",
+              "DocumentMoniker": "C:\\Users\\av\\Desktop\\OpenSimpleNotes\\OSN.Persistence\\Repositories\\NotesRepository.cs",
+              "RelativeDocumentMoniker": "OSN.Persistence\\Repositories\\NotesRepository.cs",
+              "ToolTip": "C:\\Users\\av\\Desktop\\OpenSimpleNotes\\OSN.Persistence\\Repositories\\NotesRepository.cs",
+              "RelativeToolTip": "OSN.Persistence\\Repositories\\NotesRepository.cs",
+              "ViewState": "AgIAACUAAAAAAAAAAAAuwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-06T18:05:58.223Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "NoteModelsResolver.cs",
+              "DocumentMoniker": "C:\\Users\\av\\Desktop\\OpenSimpleNotes\\OSN.Application\\Mappings\\ModelsResolvers\\NoteModelsResolver.cs",
+              "RelativeDocumentMoniker": "OSN.Application\\Mappings\\ModelsResolvers\\NoteModelsResolver.cs",
+              "ToolTip": "C:\\Users\\av\\Desktop\\OpenSimpleNotes\\OSN.Application\\Mappings\\ModelsResolvers\\NoteModelsResolver.cs",
+              "RelativeToolTip": "OSN.Application\\Mappings\\ModelsResolvers\\NoteModelsResolver.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-06T18:05:06.974Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "NoteProfile.cs",
+              "DocumentMoniker": "C:\\Users\\av\\Desktop\\OpenSimpleNotes\\OSN.Application\\Mappings\\Profiles\\NoteProfile.cs",
+              "RelativeDocumentMoniker": "OSN.Application\\Mappings\\Profiles\\NoteProfile.cs",
+              "ToolTip": "C:\\Users\\av\\Desktop\\OpenSimpleNotes\\OSN.Application\\Mappings\\Profiles\\NoteProfile.cs",
+              "RelativeToolTip": "OSN.Application\\Mappings\\Profiles\\NoteProfile.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-06T17:59:54.547Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "AuthModelsResolver.cs",
+              "DocumentMoniker": "C:\\Users\\av\\Desktop\\OpenSimpleNotes\\OSN.Application\\Mappings\\ModelsResolvers\\AuthModelsResolver.cs",
+              "RelativeDocumentMoniker": "OSN.Application\\Mappings\\ModelsResolvers\\AuthModelsResolver.cs",
+              "ToolTip": "C:\\Users\\av\\Desktop\\OpenSimpleNotes\\OSN.Application\\Mappings\\ModelsResolvers\\AuthModelsResolver.cs",
+              "RelativeToolTip": "OSN.Application\\Mappings\\ModelsResolvers\\AuthModelsResolver.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-06T17:58:49.272Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "ServiceExtensions.cs",
+              "DocumentMoniker": "C:\\Users\\av\\Desktop\\OpenSimpleNotes\\OSN.Persistence\\ServiceExtensions.cs",
+              "RelativeDocumentMoniker": "OSN.Persistence\\ServiceExtensions.cs",
+              "ToolTip": "C:\\Users\\av\\Desktop\\OpenSimpleNotes\\OSN.Persistence\\ServiceExtensions.cs",
+              "RelativeToolTip": "OSN.Persistence\\ServiceExtensions.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAABAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-06T17:46:29.043Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\av\\Desktop\\OpenSimpleNotes\\OSN\\Configuration\\Program.cs",
+              "RelativeDocumentMoniker": "OSN\\Configuration\\Program.cs",
+              "ToolTip": "C:\\Users\\av\\Desktop\\OpenSimpleNotes\\OSN\\Configuration\\Program.cs",
+              "RelativeToolTip": "OSN\\Configuration\\Program.cs",
+              "ViewState": "AgIAADcAAAAAAAAAAAAYwFgAAAATAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-06T17:35:44.352Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
