@@ -1,0 +1,85 @@
+## .NET build artifacts
+**/bin/
+**/obj/
+**/*.user
+**/*.suo
+**/*.userprefs
+**/*.dbmdl
+**/*.jfm
+*.pdb
+
+## Rider
+.idea/
+
+## Visual Studio
+.vs/
+*.csproj.user
+
+## VS Code
+.vscode/
+.history/
+
+## Build logs
+msbuild.log
+*.log
+
+
+## Node/React frontend
+**/node_modules/
+**/dist/
+**/.parcel-cache/
+**/.next/
+**/build/
+npm-debug.log
+yarn-error.log
+pnpm-lock.yaml
+
+## Android (Native)
+*.apk
+*.ap_
+*.aab
+*.dex
+*.so
+*.class
+*.log
+*.iml
+*.keystore
+**/local.properties
+**/.gradle/
+**/.cxx/
+**/.idea/
+**/build/
+**/captures/
+.gradle/
+
+## OS-specific
+.DS_Store
+Thumbs.db
+
+## Git
+*.orig
+*.rej
+
+## Secrets (be careful with what you keep here)
+**/secrets.*.json
+**/appsettings.*.local.json
+**/values.dev.yaml
+**/azds.yaml
+*.key
+*.crt
+
+## Test / Coverage
+TestResults/
+coverage/
+*.coverage
+*.coveragexml
+*.lcov
+*.ncrunch*
+.nunit/
+
+## Others
+*.tmp
+*.swp
+*.bak
+*.old
+*.cache/
