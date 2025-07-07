@@ -1,0 +1,6 @@
+@OSN_HostAddress = http://localhost:5105
+
+GET {{OSN_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
