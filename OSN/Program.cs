@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using OSN.Application;
 using OSN.Domain.Models;
 using OSN.Infrastructure;
 using OSN.Infrastructure.Services;
@@ -32,11 +33,14 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+// For controller level authorization
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("User", policy => policy.RequireRole("User", "Admin", "SuperAdmin"));
-    options.AddPolicy("Admin", policy => policy.RequireRole("Admin", "SuperAdmin"));
-    options.AddPolicy("SuperAdmin", policy => policy.RequireRole("SuperAdmin"));
+    foreach (var (policyName, allowedRoles) in RoleHierarchy._hierarchy)
+    {
+        options.AddPolicy(policyName, policy =>
+            policy.RequireRole(allowedRoles));
+    }
 });
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
