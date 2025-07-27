@@ -6,6 +6,7 @@ namespace OSN.Infrastructure;
 public class AppDbContext : DbContext
 {
     public DbSet<User> Users { get; set; }
+    public DbSet<Note> Notes { get; set; }
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
@@ -18,7 +19,24 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<User>(x =>
         {
             x.HasKey(u => u.Id);
+
             x.HasIndex(u => u.Email).IsUnique();
+
+            x.Navigation(u => u.Notes)
+                .AutoInclude();
+        });
+
+        modelBuilder.Entity<Note>(x =>
+        {
+            x.HasKey(u => u.Id);
+
+            x.HasOne(n => n.User)
+                .WithMany(u => u.Notes)
+                .HasForeignKey(n => n.UserId)
+                .IsRequired();
+
+            x.Navigation(n => n.User)
+                .AutoInclude();
         });
     }
 }
