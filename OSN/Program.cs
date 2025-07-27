@@ -8,11 +8,20 @@ using OSN.Infrastructure;
 using OSN.Infrastructure.Services;
 using System.Text;
 
+// SuperUser
+// Alexane_Prohaska@hotmail.com
+
+// Admin
+// Reanna.Runte@hotmail.com
+
+// User
+// Verona_Yundt@hotmail.com
+
+
 var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddOpenApi();
-
-
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 
 
@@ -43,35 +52,48 @@ builder.Services.AddAuthorization(options =>
     }
 });
 
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(
+    typeof(Program).Assembly,      // OSN
+    typeof(LoginCommand).Assembly, // OSN.Application
+    typeof(AppDbContext).Assembly, // OSN.Infrastructure
+    typeof(User).Assembly          // OSN.Domain
+));
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<PasswordHasher>();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
+if (app.Environment.IsDevelopment())
 {
-    var services = scope.ServiceProvider;
-    var context = services.GetRequiredService<AppDbContext>();
-    if (app.Environment.IsDevelopment())
-    {
-        context.Database.Migrate();
-    }
-    if (!context.Users.Any())
-    {
-        var dataSeeder = new DataSeeder(context);
-        dataSeeder.Seed();
-    }
+    app.UseSwagger();
+    app.UseSwaggerUI();
+    app.MapGet("/", () => Results.Redirect("/swagger"));
 }
 
 
 app.UseAuthentication();
 app.UseAuthorization();
 
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<AppDbContext>();
+    var passwordHasher = services.GetRequiredService<PasswordHasher>();
+    if (app.Environment.IsDevelopment())
+    {
+        context.Database.Migrate();
+    }
+    if (!context.Users.Any())
+    {
+        var dataSeeder = new DataSeeder(context, passwordHasher);
+        dataSeeder.Seed();
+    }
+}
 
 
-
+app.MapControllers();
 
 app.Run();
