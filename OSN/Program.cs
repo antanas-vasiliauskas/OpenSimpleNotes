@@ -62,7 +62,6 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<PasswordHasher>();
-builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
 var app = builder.Build();
 
