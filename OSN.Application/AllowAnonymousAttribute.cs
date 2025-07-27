@@ -1,4 +1,4 @@
 ﻿namespace OSN.Application;
 
-[AttributeUsage(AttributeTargets.Class)]
+[AttributeUsage(AttributeTargets.Method)]
 public class AllowAnonymousAttribute: Attribute { }

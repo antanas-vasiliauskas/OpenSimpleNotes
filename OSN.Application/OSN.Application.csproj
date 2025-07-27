@@ -15,6 +15,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\OSN.Domain\OSN.Domain.csproj" />
+		<ProjectReference Include="..\OSN.Infrastructure\OSN.Infrastructure.csproj" />
 	</ItemGroup>
 
 </Project>

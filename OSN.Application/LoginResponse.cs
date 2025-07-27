@@ -1,2 +1,2 @@
 ﻿namespace OSN.Application;
-public record LoginRespone(string Username, string Password);
+public record LoginResponse(string Token, string Role);

@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+	<PackageReference Include="Bogus" Version="35.6.1"/>
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.6">
@@ -24,7 +25,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\OSN.Domain\OSN.Domain.csproj" />
-		<ProjectReference Include="..\OSN.Application\OSN.Application.csproj" />
 	</ItemGroup>
 
 </Project>

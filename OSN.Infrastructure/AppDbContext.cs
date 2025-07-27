@@ -18,6 +18,7 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<User>(x =>
         {
             x.HasKey(u => u.Id);
+            x.HasIndex(u => u.Email).IsUnique();
         });
     }
 }
