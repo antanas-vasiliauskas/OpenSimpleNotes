@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using OSN.Application;
+using OSN.Application.Features.Auth;
 
 namespace OSN;
 
