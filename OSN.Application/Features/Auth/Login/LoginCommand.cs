@@ -1,5 +1,5 @@
 ﻿using MediatR;
 
-namespace OSN.Application;
+namespace OSN.Application.Features.Auth.Login;
 
-public record LoginCommand(LoginRequest Request): IRequest<Result<LoginResponse>>;
+public record LoginCommand(LoginRequest Request) : IRequest<Result<LoginResponse>>;

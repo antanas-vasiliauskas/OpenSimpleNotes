@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using OSN.Infrastructure;
 using OSN.Infrastructure.Services;
 
-namespace OSN.Application;
+namespace OSN.Application.Features.Auth.Login;
 
-public class LoginCommandHandler: IRequestHandler<LoginCommand, Result<LoginResponse>>
+public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<LoginResponse>>
 {
     // Obviously later add IUserRepository and IAuthService, so that no Infrastructure reference.
     // Then remove infrastrucutre from dependencies and add Application to dependencies on infrastructure.
@@ -26,14 +26,14 @@ public class LoginCommandHandler: IRequestHandler<LoginCommand, Result<LoginResp
         var request = command.Request;
         var user = await _db.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == request.Email.ToLower(), ct);
 
-        if(user == null)
+        if (user == null)
         {
             return Result<LoginResponse>.Failure("Invalid email."); // being precise whether problem is with username or password is a slight security risk
         }
 
         var verificationSuccess = _passwordHasher.VerifySHA256Password(user.PasswordHash, request.Password);
 
-        if(!verificationSuccess)
+        if (!verificationSuccess)
         {
             return Result<LoginResponse>.Failure("Invalid password.");
         }

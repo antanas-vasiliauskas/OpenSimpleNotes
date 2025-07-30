@@ -1,5 +1,5 @@
 ﻿using MediatR;
 
-namespace OSN.Application;
+namespace OSN.Application.Features.Notes.Delete;
 
-public record DeleteNoteCommand(Guid Id): IRequest<Result<Unit>>;
+public record DeleteNoteCommand(Guid Id) : IRequest<Result<Unit>>;

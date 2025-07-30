@@ -1,5 +1,5 @@
 ﻿using MediatR;
 
-namespace OSN.Application;
+namespace OSN.Application.Features.Notes.Update;
 
-public record UpdateNoteCommand(Guid Id, UpdateRequest Request): IRequest<Result<NoteResponse>>;
+public record UpdateNoteCommand(Guid Id, UpdateNoteRequest Request) : IRequest<Result<NoteResponse>>;

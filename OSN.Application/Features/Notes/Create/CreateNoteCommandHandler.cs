@@ -2,9 +2,9 @@
 using OSN.Domain.Models;
 using OSN.Infrastructure;
 
-namespace OSN.Application;
+namespace OSN.Application.Features.Notes.Create;
 
-public class CreateNoteCommandHandler: IRequestHandler<CreateNoteCommand, Result<NoteResponse>>
+public class CreateNoteCommandHandler : IRequestHandler<CreateNoteCommand, Result<NoteResponse>>
 {
     private readonly AppDbContext _db; // TODO: replace with repository
     private readonly ICurrentUserService _currentUser;

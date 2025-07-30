@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using OSN.Infrastructure;
 
-namespace OSN.Application;
+namespace OSN.Application.Features.Notes.Delete;
 
-public class DeleteNoteCommandHandler: IRequestHandler<DeleteNoteCommand, Result<Unit>>
+public class DeleteNoteCommandHandler : IRequestHandler<DeleteNoteCommand, Result<Unit>>
 {
     private readonly AppDbContext _db; // TODO: replace with repository
     private readonly ICurrentUserService _currentUser;

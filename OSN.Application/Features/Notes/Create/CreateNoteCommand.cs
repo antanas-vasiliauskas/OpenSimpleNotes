@@ -1,4 +1,4 @@
 ﻿using MediatR;
 
-namespace OSN.Application;
-public record CreateNoteCommand(CreateNoteRequest Request): IRequest<Result<NoteResponse>>;
+namespace OSN.Application.Features.Notes.Create;
+public record CreateNoteCommand(CreateNoteRequest Request) : IRequest<Result<NoteResponse>>;

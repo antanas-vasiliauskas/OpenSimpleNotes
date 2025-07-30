@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using OSN.Infrastructure;
 
-namespace OSN.Application;
+namespace OSN.Application.Features.Notes.Get;
 
 public class GetNoteByIdQueryHandler : IRequestHandler<GetNoteByIdQuery, Result<NoteResponse>>
 {

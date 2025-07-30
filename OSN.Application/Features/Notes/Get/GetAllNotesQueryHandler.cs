@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using OSN.Infrastructure;
 
-namespace OSN.Application;
+namespace OSN.Application.Features.Notes.Get;
 
-public class GetAllNotesQueryHandler: IRequestHandler<GetAllNotesQuery, Result<List<NoteResponse>>>
+public class GetAllNotesQueryHandler : IRequestHandler<GetAllNotesQuery, Result<List<NoteResponse>>>
 {
     private readonly AppDbContext _db; // TODO: replace with repository
     private readonly ICurrentUserService _currentUser;

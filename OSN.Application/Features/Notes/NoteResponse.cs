@@ -1,4 +1,4 @@
-﻿namespace OSN.Application;
+﻿namespace OSN.Application.Features.Notes;
 
 public record NoteResponse(
     Guid Id,

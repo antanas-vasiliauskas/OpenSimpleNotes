@@ -1,12 +1,12 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using OSN.Application;
-using OSN.Application.Features.Auth;
+using OSN.Application.Features.Auth.Login;
 
 namespace OSN;
 
 [ApiController]
-[Route("api/auth")]
+[Route("api/[controller]")]
 public class AuthController: ControllerBase
 {
     private readonly IMediator _mediator;

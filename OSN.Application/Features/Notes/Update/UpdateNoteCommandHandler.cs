@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using OSN.Infrastructure;
 
-namespace OSN.Application;
+namespace OSN.Application.Features.Notes.Update;
 
-public class UpdateNoteCommandHandler: IRequestHandler<UpdateNoteCommand, Result<NoteResponse>>
+public class UpdateNoteCommandHandler : IRequestHandler<UpdateNoteCommand, Result<NoteResponse>>
 {
     private readonly AppDbContext _db; // TODO: replace with repository
     private readonly ICurrentUserService _currentUser;
@@ -30,3 +30,4 @@ public class UpdateNoteCommandHandler: IRequestHandler<UpdateNoteCommand, Result
 
         return Result<NoteResponse>.Success(new NoteResponse(note.Id, note.Title, note.Content, note.IsPinned, note.CreatedAt, note.UpdatedAt));
     }
+}

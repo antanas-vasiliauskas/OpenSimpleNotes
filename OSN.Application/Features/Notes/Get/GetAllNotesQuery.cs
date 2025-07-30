@@ -1,5 +1,5 @@
 ﻿using MediatR;
 
-namespace OSN.Application;
+namespace OSN.Application.Features.Notes.Get;
 
-public record GetAllNotesQuery: IRequest<Result<List<NoteResponse>>>;
+public record GetAllNotesQuery : IRequest<Result<List<NoteResponse>>>;
