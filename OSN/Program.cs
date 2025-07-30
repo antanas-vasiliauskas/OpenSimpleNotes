@@ -91,8 +91,19 @@ builder.Services.AddScoped<PasswordHasher>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
+builder.Services.AddCors(options => {
+    options.AddPolicy("AllowAll", builder => {
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()  // Explicitly allow OPTIONS
+               .AllowAnyHeader();
+    });
+});
+
+
+
 var app = builder.Build();
 
+app.UseCors("AllowAll");
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 if (app.Environment.IsDevelopment())
