@@ -140,7 +140,7 @@ export default function Sidebar({ notes, onCreateNote, onDeleteNote, onLogout }:
     return (
         <SidebarContainer>
             <LogoPlaceholder>
-                <Typography variant="h6">Notes App</Typography>
+                <Typography variant="h6">Open Simple Notes</Typography>
             </LogoPlaceholder>
             
             <CreateButtonContainer>

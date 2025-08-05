@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using System.Reflection;
 using System.Security.Claims;
@@ -40,4 +39,4 @@ public class AuthorizationBehavior<TRequest, TResponse>: IPipelineBehavior<TRequ
 
         return await next();
     }
-}}
+}

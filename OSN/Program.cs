@@ -121,7 +121,7 @@ if (app.Environment.IsDevelopment())
     {
         c.ConfigObject.AdditionalItems["persistAuthorization"] = true;
     });
-    app.MapGet("/", () => Results.Redirect("/swagger"));
+    app.MapGet("/", () => Results.Redirect("/swagger")).AllowAnonymous();
 }
 
 

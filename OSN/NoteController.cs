@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OSN.Application;
 using OSN.Application.Features.Notes;
 using OSN.Application.Features.Notes.Create;
 using OSN.Application.Features.Notes.Delete;
@@ -10,7 +11,7 @@ using OSN.Application.Features.Notes.Update;
 namespace OSN;
 
 [ApiController]
-[Authorize(Roles = "User")]
+[Authorize(Policy = RoleHierarchy.UserPolicy)]
 [Route("api/[controller]")]
 public class NoteController: ControllerBase
 {
