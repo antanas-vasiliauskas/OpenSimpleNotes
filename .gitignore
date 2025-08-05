@@ -1,3 +1,11 @@
+
+## production build artifacts
+**/PublishProfiles/
+**/ServiceDependencies/
+
+## production db string
+appsettings.Production.json
+
 ## .NET build artifacts
 **/bin/
 **/obj/
