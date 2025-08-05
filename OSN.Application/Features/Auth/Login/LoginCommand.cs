@@ -2,4 +2,5 @@
 
 namespace OSN.Application.Features.Auth.Login;
 
+[AllowAnonymousCommand]
 public record LoginCommand(LoginRequest Request) : IRequest<Result<LoginResponse>>;

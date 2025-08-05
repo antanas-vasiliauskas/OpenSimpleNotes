@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -74,6 +75,13 @@ builder.Services.AddAuthorization(options =>
         options.AddPolicy(policyName, policy =>
             policy.RequireRole(allowedRoles));
     }
+    // Set fallback policy to be DefaultPolicy (UserPolicy)
+    // Fallback policy still requires [Authorize]
+    // just not need to specify [Authorize(Policy = RoleHierarchy.UserPolicy)]
+    options.FallbackPolicy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .RequireRole(RoleHierarchy._hierarchy[RoleHierarchy.DefaultPolicy])
+        .Build();
 });
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(

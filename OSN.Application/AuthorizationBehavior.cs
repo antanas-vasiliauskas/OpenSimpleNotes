@@ -14,31 +14,30 @@ public class AuthorizationBehavior<TRequest, TResponse>: IPipelineBehavior<TRequ
         _httpContentAccessor = httpContentAccessor;
     }
 
-    public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken ct)
+    public async Task<TResponse> Handle(TRequest command, RequestHandlerDelegate<TResponse> next, CancellationToken ct)
     {
-        if (request.GetType().GetCustomAttribute<AllowAnonymousAttribute>() != null) // [AllowAnonymous]
+        if (command.GetType().GetCustomAttribute<AllowAnonymousCommandAttribute>() != null)
         {
             return await next();
         }
 
         var userRole = _httpContentAccessor.HttpContext?.User.FindFirst(ClaimTypes.Role)?.Value;
-        if (userRole == null) throw new UnauthorizedAccessException("No token or role value found.");
+        if (userRole == null) throw new UnauthorizedAccessException("No token or policy value found.");
 
-        var authorizeAttribute = request.GetType().GetCustomAttribute<AuthorizeAttribute>();
+        var authorizeAttribute = command.GetType().GetCustomAttribute<AuthorizeCommandAttribute>();
 
-        if (authorizeAttribute != null && !string.IsNullOrEmpty(authorizeAttribute.Roles)) // [Authorize(Roles = "Admin")]
+        if (authorizeAttribute != null && !string.IsNullOrEmpty(authorizeAttribute.Policy))
         {
-            var requiredRoles = authorizeAttribute.Roles.Split(',');
-            if (requiredRoles.Any(requiredRole => RoleHierarchy.HasPermission(userRole, requiredRole))){
+            if (!RoleHierarchy.HasPermission(userRole, authorizeAttribute.Policy))
+            {
                 throw new UnauthorizedAccessException("Forbidden.");
             }
         }
-        else if (!RoleHierarchy.HasPermission(userRole, RoleHierarchy.DefaultRole)) // Empty or [Authorize] - check for default role (User)
+        else if (!RoleHierarchy.HasPermission(userRole, RoleHierarchy.DefaultPolicy))
         {
-            throw new UnauthorizedAccessException("Invalid role.");
+            throw new UnauthorizedAccessException("Invalid policy.");
         }
-
 
         return await next();
     }
-}
+}}

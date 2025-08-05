@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using OSN.Application;
 using OSN.Application.Features.Auth.Login;
 
 namespace OSN;
@@ -16,9 +15,8 @@ public class AuthController: ControllerBase
     }
 
     [HttpPost("login")]
-    [AllowAnonymous]
     public async Task<IActionResult> Login(LoginRequest request)
-    {
+    {`
         var command = new LoginCommand(request);
         var result = await _mediator.Send(command);
         if (!result.IsSuccess)
