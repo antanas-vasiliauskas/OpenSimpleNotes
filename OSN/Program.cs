@@ -135,6 +135,8 @@ using (var scope = app.Services.CreateScope())
     var passwordHasher = services.GetRequiredService<PasswordHasher>();
     if (app.Environment.IsDevelopment())
     {
+        // dotnet ef database update --connection "your-remote-connection-string"
+        // to update remote. Can't do it in code, it is security vulnerability.
         context.Database.Migrate();
         if (!context.Users.Any())
         {

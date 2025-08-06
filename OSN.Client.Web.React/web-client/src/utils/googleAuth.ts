@@ -1,3 +1,5 @@
+// impmented by <script src="https://accounts.google.com/gsi/client" async defer></script>
+// in index.html
 declare global {
   interface Window {
     google?: {
