@@ -5,6 +5,9 @@
 ## Production secrets - DO NOT COMMIT
 appsettings.Production.json
 
+## Contains OAuth secrets, don't commit as well
+appsettings.Development.json
+
 ## .NET build artifacts
 **/bin/
 **/obj/

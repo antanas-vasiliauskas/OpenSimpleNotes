@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
+import { Button, TextField, Box, Typography, Divider, Alert } from '@mui/material';
 import api from '../api/client';
-import { Button, TextField, Box, Typography, Divider } from '@mui/material';
 import LandingPresentation from './LandingPresentation';
+import { initGoogleAuth, promptGoogleSignIn } from '../utils/googleAuth';
 
 export default function Register({ onRegister }: { onRegister: () => void }) {
     const [formData, setFormData] = useState({ 
@@ -10,14 +11,56 @@ export default function Register({ onRegister }: { onRegister: () => void }) {
         password: '', 
         confirmPassword: '' 
     });
-    
+    const [error, setError] = useState<string>('');
+    const [loading, setLoading] = useState(false);
+
+    const handleGoogleSuccess = useCallback(async (idToken: string) => {
+        setLoading(true);
+        setError('');
+        
+        try {
+            const response = await api.post('auth/google-signin', {
+                IdToken: idToken
+            });
+            
+            const { Token, role } = response.data;
+            localStorage.setItem('token', Token);
+            localStorage.setItem('userRole', role);
+            onRegister();
+        } catch (error: any) {
+            console.error('Google sign-up failed:', error);
+            setError(error.response?.data?.message || 'Google sign-up failed. Please try again.');
+        } finally {
+            setLoading(false);
+        }
+    }, [onRegister]);
+
+    useEffect(() => {
+        // Initialize Google Auth when component mounts
+        const initGoogle = () => {
+            initGoogleAuth(handleGoogleSuccess);
+        };
+
+        if (window.google) {
+            initGoogle();
+        } else {
+            const script = document.querySelector('script[src="https://accounts.google.com/gsi/client"]');
+            if (script) {
+                script.addEventListener('load', initGoogle);
+            }
+        }
+    }, [handleGoogleSuccess]);
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         
         if (formData.password !== formData.confirmPassword) {
-            alert('Passwords do not match');
+            setError('Passwords do not match');
             return;
         }
+        
+        setLoading(true);
+        setError('');
         
         try {
             const { data } = await api.post('auth/register', {
@@ -26,14 +69,20 @@ export default function Register({ onRegister }: { onRegister: () => void }) {
             });
             localStorage.setItem('token', data.token);
             onRegister();
-        } catch (error) {
-            alert('Registration failed.');
+        } catch (error: any) {
+            console.error('Registration failed:', error);
+            setError(error.response?.data?.message || 'Registration failed. Please try again.');
+        } finally {
+            setLoading(false);
         }
     };
 
     const handleGoogleSignUp = () => {
-        // TODO: Implement Google sign-up functionality
-        console.log('Google sign-up clicked');
+        if (window.google) {
+            promptGoogleSignIn();
+        } else {
+            setError('Google Sign-up is not available. Please try again later.');
+        }
     };
 
     return (
@@ -85,12 +134,19 @@ export default function Register({ onRegister }: { onRegister: () => void }) {
                             Create Account
                         </Typography>
                         
+                        {error && (
+                            <Alert severity="error" sx={{ mb: 2 }}>
+                                {error}
+                            </Alert>
+                        )}
+                        
                         <TextField
                             fullWidth
                             label="Email"
                             type="email"
                             value={formData.email}
                             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                            disabled={loading}
                             required
                         />
                         
@@ -100,6 +156,7 @@ export default function Register({ onRegister }: { onRegister: () => void }) {
                             type="password"
                             value={formData.password}
                             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                            disabled={loading}
                             required
                         />
                         
@@ -109,6 +166,7 @@ export default function Register({ onRegister }: { onRegister: () => void }) {
                             type="password"
                             value={formData.confirmPassword}
                             onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                            disabled={loading}
                             required
                         />
                         
@@ -117,9 +175,10 @@ export default function Register({ onRegister }: { onRegister: () => void }) {
                             variant="contained" 
                             fullWidth 
                             size="large"
+                            disabled={loading}
                             sx={{ mt: 1 }}
                         >
-                            Create Account
+                            {loading ? 'Creating Account...' : 'Create Account'}
                         </Button>
                         
                         <Divider sx={{ my: 2 }}>or</Divider>
@@ -129,12 +188,17 @@ export default function Register({ onRegister }: { onRegister: () => void }) {
                             variant="outlined"
                             fullWidth
                             size="large"
+                            disabled={loading}
                             sx={{
                                 backgroundColor: 'white',
                                 color: 'black',
                                 border: '1px solid #dadce0',
                                 textTransform: 'none',
                                 '&:hover': {
+                                    backgroundColor: '#f8f9fa',
+                                    border: '1px solid #dadce0'
+                                },
+                                '&:disabled': {
                                     backgroundColor: '#f8f9fa',
                                     border: '1px solid #dadce0'
                                 }
@@ -145,7 +209,7 @@ export default function Register({ onRegister }: { onRegister: () => void }) {
                                 alt="Google" 
                                 sx={{ width: 20, height: 20, mr: 2 }} 
                             />
-                            Sign up with Google
+                            Continue with Google
                         </Button>
                         
                         <Typography variant="body2" align="center" sx={{ mt: 3 }}>

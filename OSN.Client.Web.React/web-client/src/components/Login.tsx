@@ -1,26 +1,75 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
+import { Button, TextField, Box, Typography, Divider, Alert } from '@mui/material';
 import api from '../api/client';
-import { Button, TextField, Box, Typography, Divider } from '@mui/material';
 import LandingPresentation from './LandingPresentation';
+import { initGoogleAuth, promptGoogleSignIn } from '../utils/googleAuth';
 
 export default function Login({ onLogin }: { onLogin: () => void }) {
     const [credentials, setCredentials] = useState({ email: '', password: '' });
-    
+    const [error, setError] = useState<string>('');
+    const [loading, setLoading] = useState(false);
+
+    const handleGoogleSuccess = useCallback(async (idToken: string) => {
+        setLoading(true);
+        setError('');
+        
+        try {
+            const response = await api.post('auth/google-signin', {
+                IdToken: idToken
+            });
+            
+            const { Token, role } = response.data;
+            localStorage.setItem('token', Token);
+            localStorage.setItem('userRole', role);
+            onLogin();
+        } catch (error: any) {
+            console.error('Google sign-in failed:', error);
+            setError(error.response?.data?.message || 'Google sign-in failed. Please try again.');
+        } finally {
+            setLoading(false);
+        }
+    }, [onLogin]);
+
+    useEffect(() => {
+        // Initialize Google Auth when component mounts
+        const initGoogle = () => {
+            initGoogleAuth(handleGoogleSuccess);
+        };
+
+        if (window.google) {
+            initGoogle();
+        } else {
+            const script = document.querySelector('script[src="https://accounts.google.com/gsi/client"]');
+            if (script) {
+                script.addEventListener('load', initGoogle);
+            }
+        }
+    }, [handleGoogleSuccess]);
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setLoading(true);
+        setError('');
+        
         try {
             const { data } = await api.post('auth/login', credentials);
             localStorage.setItem('token', data.token);
             onLogin();
-        } catch (error) {
-            alert('Login failed.');
+        } catch (error: any) {
+            console.error('Login failed:', error);
+            setError(error.response?.data?.message || 'Login failed. Please check your credentials.');
+        } finally {
+            setLoading(false);
         }
     };
 
     const handleGoogleSignIn = () => {
-        // TODO: Implement Google sign-in functionality
-        console.log('Google sign-in clicked');
+        if (window.google) {
+            promptGoogleSignIn();
+        } else {
+            setError('Google Sign-in is not available. Please try again later.');
+        }
     };
 
     return (
@@ -69,8 +118,14 @@ export default function Login({ onLogin }: { onLogin: () => void }) {
                         }}
                     >
                         <Typography variant="h4" component="h1" align="center" sx={{ mb: 3, color: '#333' }}>
-                            Sign in with Email
+                            Sign In
                         </Typography>
+                        
+                        {error && (
+                            <Alert severity="error" sx={{ mb: 2 }}>
+                                {error}
+                            </Alert>
+                        )}
                         
                         <TextField
                             fullWidth
@@ -78,6 +133,7 @@ export default function Login({ onLogin }: { onLogin: () => void }) {
                             type="email"
                             value={credentials.email}
                             onChange={(e) => setCredentials({ ...credentials, email: e.target.value })}
+                            disabled={loading}
                             required
                         />
                         
@@ -87,6 +143,7 @@ export default function Login({ onLogin }: { onLogin: () => void }) {
                             type="password"
                             value={credentials.password}
                             onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
+                            disabled={loading}
                             required
                         />
                         
@@ -95,9 +152,10 @@ export default function Login({ onLogin }: { onLogin: () => void }) {
                             variant="contained" 
                             fullWidth 
                             size="large"
+                            disabled={loading}
                             sx={{ mt: 1 }}
                         >
-                            Sign In
+                            {loading ? 'Signing In...' : 'Sign In'}
                         </Button>
                         
                         <Divider sx={{ my: 2 }}>or</Divider>
@@ -107,12 +165,17 @@ export default function Login({ onLogin }: { onLogin: () => void }) {
                             variant="outlined"
                             fullWidth
                             size="large"
+                            disabled={loading}
                             sx={{
                                 backgroundColor: 'white',
                                 color: 'black',
                                 border: '1px solid #dadce0',
                                 textTransform: 'none',
                                 '&:hover': {
+                                    backgroundColor: '#f8f9fa',
+                                    border: '1px solid #dadce0'
+                                },
+                                '&:disabled': {
                                     backgroundColor: '#f8f9fa',
                                     border: '1px solid #dadce0'
                                 }
@@ -123,7 +186,7 @@ export default function Login({ onLogin }: { onLogin: () => void }) {
                                 alt="Google" 
                                 sx={{ width: 20, height: 20, mr: 2 }} 
                             />
-                            Sign in with Google
+                            Continue with Google
                         </Button>
                         
                         <Typography variant="body2" align="center" sx={{ mt: 3 }}>
