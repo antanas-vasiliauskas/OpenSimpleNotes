@@ -11,6 +11,6 @@ public class PasswordHasher
     }
     public string HashSHA256Password(string password)
     {
-        return Convert.ToBase64String(SHA256.HashData(Encoding.UTF8.GetBytes("password")));
+        return Convert.ToBase64String(SHA256.HashData(Encoding.UTF8.GetBytes(password)));
     }
 }

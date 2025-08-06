@@ -4,3 +4,4 @@
 4. Don't mention your inability to create files, because that is not the case.
 4. Don't use terminal commands, just edit the files directly
 5. When responding, consider in answer, that I'm using .NET 8 at it might have nuanced differences compared to previous versions
+6. File editing doesn't have issues. Edit the files directly as needed

@@ -1,9 +1,8 @@
-
 ## production build artifacts
 **/PublishProfiles/
 **/ServiceDependencies/
 
-## production db string
+## Production secrets - DO NOT COMMIT
 appsettings.Production.json
 
 ## .NET build artifacts
@@ -30,7 +29,6 @@ appsettings.Production.json
 ## Build logs
 msbuild.log
 *.log
-
 
 ## Node/React frontend
 **/node_modules/
@@ -68,9 +66,8 @@ Thumbs.db
 *.orig
 *.rej
 
-## Secrets (be careful with what you keep here)
+## Other secrets
 **/secrets.*.json
-**/appsettings.*.local.json
 **/values.dev.yaml
 **/azds.yaml
 *.key

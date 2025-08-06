@@ -7,6 +7,7 @@ public class AppDbContext : DbContext
 {
     public DbSet<User> Users { get; set; }
     public DbSet<Note> Notes { get; set; }
+    public DbSet<GoogleSignInFields> GoogleSignInFields { get; set; }
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
@@ -16,7 +17,6 @@ public class AppDbContext : DbContext
     {
         configurationBuilder.Properties<DateTime>().HaveConversion<DateTimeToUtcConverter>();
     }
-
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -29,6 +29,9 @@ public class AppDbContext : DbContext
             x.HasIndex(u => u.Email).IsUnique();
 
             x.Navigation(u => u.Notes)
+                .AutoInclude();
+
+            x.Navigation(u => u.GoogleSignIn)
                 .AutoInclude();
         });
 
@@ -43,6 +46,18 @@ public class AppDbContext : DbContext
 
             x.Navigation(n => n.User)
                 .AutoInclude();
+        });
+
+        modelBuilder.Entity<GoogleSignInFields>(x =>
+        {
+            x.HasKey(g => g.Id);
+
+            x.HasIndex(g => g.GoogleId).IsUnique();
+
+            x.HasOne<User>()
+                .WithOne(u => u.GoogleSignIn)
+                .HasForeignKey<GoogleSignInFields>(g => g.UserId)
+                .IsRequired();
         });
     }
 }

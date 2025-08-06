@@ -136,11 +136,11 @@ using (var scope = app.Services.CreateScope())
     if (app.Environment.IsDevelopment())
     {
         context.Database.Migrate();
-    }
-    if (!context.Users.Any())
-    {
-        var dataSeeder = new DataSeeder(context, passwordHasher);
-        dataSeeder.Seed();
+        if (!context.Users.Any())
+        {
+            var dataSeeder = new DataSeeder(context, passwordHasher);
+            dataSeeder.Seed();
+        }
     }
 }
 
