@@ -2,6 +2,7 @@ import { Box, CssBaseline } from '@mui/material';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
 import NotesPage from './pages/NotesPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import NoteView from './components/NoteView';
@@ -15,6 +16,9 @@ function AppRoutes() {
             <Routes>
                 <Route path="/login" element={
                     <LoginPage isAuthenticated={isAuthenticated} onLogin={login} />
+                } />
+                <Route path="/register" element={
+                    <RegisterPage isAuthenticated={isAuthenticated} onRegister={login} />
                 } />
                 <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} />}>
                     <Route path="/" element={<NotesPage onLogout={logout} />}>

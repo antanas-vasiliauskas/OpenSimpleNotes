@@ -4,23 +4,36 @@ import api from '../api/client';
 import { Button, TextField, Box, Typography, Divider } from '@mui/material';
 import LandingPresentation from './LandingPresentation';
 
-export default function Login({ onLogin }: { onLogin: () => void }) {
-    const [credentials, setCredentials] = useState({ email: '', password: '' });
+export default function Register({ onRegister }: { onRegister: () => void }) {
+    const [formData, setFormData] = useState({ 
+        email: '', 
+        password: '', 
+        confirmPassword: '' 
+    });
     
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        
+        if (formData.password !== formData.confirmPassword) {
+            alert('Passwords do not match');
+            return;
+        }
+        
         try {
-            const { data } = await api.post('auth/login', credentials);
+            const { data } = await api.post('auth/register', {
+                email: formData.email,
+                password: formData.password
+            });
             localStorage.setItem('token', data.token);
-            onLogin();
+            onRegister();
         } catch (error) {
-            alert('Login failed.');
+            alert('Registration failed.');
         }
     };
 
-    const handleGoogleSignIn = () => {
-        // TODO: Implement Google sign-in functionality
-        console.log('Google sign-in clicked');
+    const handleGoogleSignUp = () => {
+        // TODO: Implement Google sign-up functionality
+        console.log('Google sign-up clicked');
     };
 
     return (
@@ -28,7 +41,7 @@ export default function Login({ onLogin }: { onLogin: () => void }) {
             {/* Left side - Presentation (60%) */}
             <LandingPresentation />
 
-            {/* Right side - Login Form (40%) */}
+            {/* Right side - Register Form (40%) */}
             <Box 
                 sx={{ 
                     width: '40%',
@@ -69,15 +82,15 @@ export default function Login({ onLogin }: { onLogin: () => void }) {
                         }}
                     >
                         <Typography variant="h4" component="h1" align="center" sx={{ mb: 3, color: '#333' }}>
-                            Sign in with Email
+                            Create Account
                         </Typography>
                         
                         <TextField
                             fullWidth
                             label="Email"
                             type="email"
-                            value={credentials.email}
-                            onChange={(e) => setCredentials({ ...credentials, email: e.target.value })}
+                            value={formData.email}
+                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                             required
                         />
                         
@@ -85,8 +98,17 @@ export default function Login({ onLogin }: { onLogin: () => void }) {
                             fullWidth
                             label="Password"
                             type="password"
-                            value={credentials.password}
-                            onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
+                            value={formData.password}
+                            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                            required
+                        />
+                        
+                        <TextField
+                            fullWidth
+                            label="Confirm Password"
+                            type="password"
+                            value={formData.confirmPassword}
+                            onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
                             required
                         />
                         
@@ -97,13 +119,13 @@ export default function Login({ onLogin }: { onLogin: () => void }) {
                             size="large"
                             sx={{ mt: 1 }}
                         >
-                            Sign In
+                            Create Account
                         </Button>
                         
                         <Divider sx={{ my: 2 }}>or</Divider>
                         
                         <Button
-                            onClick={handleGoogleSignIn}
+                            onClick={handleGoogleSignUp}
                             variant="outlined"
                             fullWidth
                             size="large"
@@ -123,20 +145,20 @@ export default function Login({ onLogin }: { onLogin: () => void }) {
                                 alt="Google" 
                                 sx={{ width: 20, height: 20, mr: 2 }} 
                             />
-                            Sign in with Google
+                            Sign up with Google
                         </Button>
                         
                         <Typography variant="body2" align="center" sx={{ mt: 3 }}>
-                            Don't have an account yet?{' '}
+                            Already have an account?{' '}
                             <Link 
-                                to="/register" 
+                                to="/login" 
                                 style={{ 
                                     color: '#1976d2', 
                                     textDecoration: 'none',
                                     fontWeight: 500
                                 }}
                             >
-                                Register now
+                                Sign in
                             </Link>
                         </Typography>
                     </Box>
