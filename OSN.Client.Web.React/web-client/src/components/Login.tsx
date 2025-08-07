@@ -19,8 +19,8 @@ export default function Login({ onLogin }: { onLogin: () => void }) {
                 IdToken: idToken
             });
             
-            const { Token, role } = response.data;
-            localStorage.setItem('token', Token);
+            const { token, role } = response.data;
+            localStorage.setItem('token', token);
             localStorage.setItem('userRole', role);
             onLogin();
         } catch (error: any) {

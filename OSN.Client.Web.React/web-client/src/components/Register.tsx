@@ -23,8 +23,8 @@ export default function Register({ onRegister }: { onRegister: () => void }) {
                 IdToken: idToken
             });
             
-            const { Token, role } = response.data;
-            localStorage.setItem('token', Token);
+            const { token, role } = response.data;
+            localStorage.setItem('token', token);
             localStorage.setItem('userRole', role);
             onRegister();
         } catch (error: any) {
