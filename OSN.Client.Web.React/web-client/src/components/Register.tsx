@@ -14,13 +14,14 @@ export default function Register({ onRegister }: { onRegister: () => void }) {
     const [error, setError] = useState<string>('');
     const [loading, setLoading] = useState(false);
 
-    const handleGoogleSuccess = useCallback(async (idToken: string) => {
+    const handleGoogleSuccess = useCallback(async (authorizationCode: string) => {
         setLoading(true);
         setError('');
         
         try {
             const response = await api.post('auth/google-signin', {
-                IdToken: idToken
+                AuthorizationCode: authorizationCode,
+                RedirectUri: `${window.location.origin}/oauth-callback.html`  // Must match the OAuth flow
             });
             
             const { token, role } = response.data;
@@ -37,18 +38,7 @@ export default function Register({ onRegister }: { onRegister: () => void }) {
 
     useEffect(() => {
         // Initialize Google Auth when component mounts
-        const initGoogle = () => {
-            initGoogleAuth(handleGoogleSuccess);
-        };
-
-        if (window.google) {
-            initGoogle();
-        } else {
-            const script = document.querySelector('script[src="https://accounts.google.com/gsi/client"]');
-            if (script) {
-                script.addEventListener('load', initGoogle);
-            }
-        }
+        initGoogleAuth(handleGoogleSuccess);
     }, [handleGoogleSuccess]);
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -78,11 +68,7 @@ export default function Register({ onRegister }: { onRegister: () => void }) {
     };
 
     const handleGoogleSignUp = () => {
-        if (window.google) {
-            promptGoogleSignIn();
-        } else {
-            setError('Google Sign-up is not available. Please try again later.');
-        }
+        promptGoogleSignIn();
     };
 
     return (

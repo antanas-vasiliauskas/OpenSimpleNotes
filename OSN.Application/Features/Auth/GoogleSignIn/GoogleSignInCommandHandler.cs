@@ -12,12 +12,14 @@ public class GoogleSignInCommandHandler : IRequestHandler<GoogleSignInCommand, R
 {
     private readonly AppDbContext _db;
     private readonly AuthService _authService;
+    private readonly GoogleOAuth2Service _googleOAuth2Service;
     private readonly IConfiguration _configuration;
 
-    public GoogleSignInCommandHandler(AppDbContext db, AuthService authService, IConfiguration configuration)
+    public GoogleSignInCommandHandler(AppDbContext db, AuthService authService, GoogleOAuth2Service googleOAuth2Service, IConfiguration configuration)
     {
         _db = db;
         _authService = authService;
+        _googleOAuth2Service = googleOAuth2Service;
         _configuration = configuration;
     }
 
@@ -26,18 +28,25 @@ public class GoogleSignInCommandHandler : IRequestHandler<GoogleSignInCommand, R
         try
         {
             var request = command.Request;
-            var clientId = _configuration["Authentication:Google:ClientId"];
-            
 
-            // Validate Google ID token
-            var payload = await GoogleJsonWebSignature.ValidateAsync(request.IdToken, new GoogleJsonWebSignature.ValidationSettings
+            // Exchange authorization code for ID token
+            var idToken = await _googleOAuth2Service.ExchangeAuthorizationCodeAsync(request.AuthorizationCode, request.RedirectUri);
+
+            if (string.IsNullOrEmpty(idToken))
+            {
+                return Result<GoogleSignInResponse>.Failure("Failed to obtain ID token from Google.");
+            }
+
+            // Validate the ID token
+            var clientId = _configuration["Authentication:Google:ClientId"];
+            var payload = await GoogleJsonWebSignature.ValidateAsync(idToken, new GoogleJsonWebSignature.ValidationSettings
             {
                 Audience = new[] { clientId }
             });
 
             if (payload == null)
             {
-                return Result<GoogleSignInResponse>.Failure("Invalid Google token.");
+                return Result<GoogleSignInResponse>.Failure("Invalid Google ID token.");
             }
 
             var existingUser = await _db.Users
@@ -103,9 +112,13 @@ public class GoogleSignInCommandHandler : IRequestHandler<GoogleSignInCommand, R
 
             return Result<GoogleSignInResponse>.Success(new GoogleSignInResponse(token, existingUser.Role, isNewUser));
         }
+        catch (HttpRequestException ex)
+        {
+            return Result<GoogleSignInResponse>.Failure($"Google token exchange failed: {ex.Message}");
+        }
         catch (InvalidJwtException)
         {
-            return Result<GoogleSignInResponse>.Failure("Invalid Google token.");
+            return Result<GoogleSignInResponse>.Failure("Invalid Google ID token.");
         }
         catch (Exception ex)
         {
