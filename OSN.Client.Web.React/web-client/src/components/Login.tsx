@@ -60,13 +60,13 @@ export default function Login({ onLogin }: { onLogin: () => void }) {
 
     return (
         <Box sx={{ display: 'flex', minHeight: '100vh', width: '100vw' }}>
-            {/* Left side - Presentation (60%) */}
+            {/* Left side - Presentation (hidden on small screens) */}
             <LandingPresentation />
 
-            {/* Right side - Login Form (40%) */}
+            {/* Right side - Login Form */}
             <Box 
                 sx={{ 
-                    width: '40%',
+                    width: { xs: '100%', md: '40%' },
                     flexShrink: 0,
                     backgroundColor: 'white',
                     display: 'flex',

@@ -5,10 +5,11 @@ const LandingPresentation: React.FC = () => {
     return (
         <Box 
             sx={{ 
-                width: '60%',
+                // Hide completely on small screens; show starting at md breakpoint
+                display: { xs: 'none', md: 'flex' },
+                width: { md: '60%' },
                 flexShrink: 0,
                 background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center',
@@ -49,20 +50,47 @@ const LandingPresentation: React.FC = () => {
                     Built for individuals and teams who value clean, distraction-free writing experiences.
                 </Typography>
                 
-                <Box component="a" href="#" sx={{ display: 'inline-block', mb: 6 }}>
+                <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', alignItems: 'center', mb: 6 }}>
+                    <Box component="a" href="#" aria-label="Get it on Google Play" sx={{ display: 'inline-block' }}>
+                        <Box 
+                            component="img" 
+                            src="/img/google_play_img.png"
+                            alt="Get it on Google Play"
+                            sx={{ 
+                                height: 62,
+                                width: 'auto',
+                                cursor: 'pointer',
+                                '&:hover': {
+                                    transform: 'scale(1.05)',
+                                    transition: 'transform 0.2s'
+                                }
+                            }}
+                        />
+                    </Box>
+                    {/* GitHub button matching other buttons */}
                     <Box 
-                        component="img" 
-                        src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
-                        alt="Get it on Google Play"
-                        sx={{ 
-                            height: 80,
-                            cursor: 'pointer',
-                            '&:hover': {
-                                transform: 'scale(1.05)',
-                                transition: 'transform 0.2s'
-                            }
-                        }}
-                    />
+                        component="a" 
+                        href="https://github.com/antanas-vasiliauskas/OpenSimpleNotes" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        title="Source code on GitHub"
+                        sx={{ display: 'inline-block' }}
+                    >
+                        <Box
+                            component="img"
+                            src="/img/github_img.png"
+                            alt="GitHub Logo"
+                            sx={{ 
+                                height: 62,
+                                width: 'auto',
+                                cursor: 'pointer',
+                                '&:hover': {
+                                    transform: 'scale(1.05)',
+                                    transition: 'transform 0.2s'
+                                }
+                            }}
+                        />
+                    </Box>
                 </Box>
             </Box>
             

@@ -73,13 +73,13 @@ export default function Register({ onRegister }: { onRegister: () => void }) {
 
     return (
         <Box sx={{ display: 'flex', minHeight: '100vh', width: '100vw' }}>
-            {/* Left side - Presentation (60%) */}
+            {/* Left side - Presentation (hidden on small screens) */}
             <LandingPresentation />
 
-            {/* Right side - Register Form (40%) */}
+            {/* Right side - Register Form */}
             <Box 
                 sx={{ 
-                    width: '40%',
+                    width: { xs: '100%', md: '40%' },
                     flexShrink: 0,
                     backgroundColor: 'white',
                     display: 'flex',
