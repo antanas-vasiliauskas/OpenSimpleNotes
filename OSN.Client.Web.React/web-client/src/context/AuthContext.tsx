@@ -1,9 +1,16 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import api from '../api/client';
+import { clearUserData, getUserRole } from '../utils/user';
+
+interface User {
+    role: string | null;
+    // Add other user properties as needed
+}
 
 interface AuthContextType {
     isAuthenticated: boolean;
     loading: boolean;
+    user: User;
     login: () => void;
     logout: () => Promise<void>;
     checkAuth: () => Promise<boolean>;
@@ -14,6 +21,7 @@ const AuthContext = createContext<AuthContextType | null>(null);
 export function AuthProvider({ children }: { children: ReactNode }) {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [user, setUser] = useState<User>({ role: null });
 
     const checkAuth = async (): Promise<boolean> => {
         try {
@@ -22,7 +30,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             // If your backend has an /auth/me endpoint, use that
             // Otherwise, use an existing endpoint like /note (which likely requires auth)
             const response = await api.get('/note');
-            return response.status === 200;
+            
+            // Update user info from localStorage if authentication is successful
+            if (response.status === 200) {
+                setUser({ role: getUserRole() });
+                return true;
+            }
+            return false;
         } catch (error: any) {
             // If we get a 401 or any error, consider the user not authenticated
             return false;
@@ -31,6 +45,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const login = () => {
         setIsAuthenticated(true);
+        setUser({ role: getUserRole() });
     };
 
     const logout = async () => {
@@ -40,9 +55,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         } catch (error) {
             console.error('Logout request failed:', error);
         } finally {
-            // Clean up any remaining localStorage items and update state
-            localStorage.removeItem('token');
-            localStorage.removeItem('userRole');
+            // Clean up user data and update state
+            clearUserData();
+            setUser({ role: null });
             setIsAuthenticated(false);
         }
     };
@@ -58,6 +73,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         // Listen for authentication errors from API interceptor
         const handleAuthError = () => {
             setIsAuthenticated(false);
+            clearUserData();
+            setUser({ role: null });
         };
 
         window.addEventListener('auth-error', handleAuthError);
@@ -69,7 +86,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }, []);
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, loading, login, logout, checkAuth }}>
+        <AuthContext.Provider value={{ isAuthenticated, loading, user, login, logout, checkAuth }}>
             {children}
         </AuthContext.Provider>
     );

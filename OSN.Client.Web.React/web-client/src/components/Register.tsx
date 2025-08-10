@@ -24,8 +24,11 @@ export default function Register({ onRegister }: { onRegister: () => void }) {
                 RedirectUri: `${window.location.origin}/oauth-callback.html`  // Must match the OAuth flow
             });
             
-            // With cookie-based auth, we don't need to handle tokens manually
-            // The cookie should be set automatically by the server
+            // Store user data from response (like role) even with cookie-based auth
+            if (response.data.role) {
+                localStorage.setItem('userRole', response.data.role);
+            }
+            
             onRegister();
         } catch (error: any) {
             console.error('Google sign-up failed:', error);
@@ -56,8 +59,12 @@ export default function Register({ onRegister }: { onRegister: () => void }) {
                 email: formData.email,
                 password: formData.password
             });
-            // With cookie-based auth, we don't need to handle tokens manually
-            // The cookie should be set automatically by the server
+            
+            // Store user data from response (like role) even with cookie-based auth
+            if (response.data.role) {
+                localStorage.setItem('userRole', response.data.role);
+            }
+            
             onRegister();
         } catch (error: any) {
             console.error('Registration failed:', error);

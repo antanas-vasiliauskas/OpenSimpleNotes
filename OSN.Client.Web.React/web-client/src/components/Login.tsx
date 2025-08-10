@@ -20,8 +20,11 @@ export default function Login({ onLogin }: { onLogin: () => void }) {
                 RedirectUri: `${window.location.origin}/oauth-callback.html`  // Must match the OAuth flow
             });
             
-            // With cookie-based auth, we don't need to handle tokens manually
-            // The cookie should be set automatically by the server
+            // Store user data from response (like role) even with cookie-based auth
+            if (response.data.role) {
+                localStorage.setItem('userRole', response.data.role);
+            }
+            
             onLogin();
         } catch (error: any) {
             console.error('Google sign-in failed:', error);
@@ -43,8 +46,12 @@ export default function Login({ onLogin }: { onLogin: () => void }) {
         
         try {
             const response = await api.post('auth/login', credentials);
-            // With cookie-based auth, we don't need to handle tokens manually
-            // The cookie should be set automatically by the server
+            
+            // Store user data from response (like role) even with cookie-based auth
+            if (response.data.role) {
+                localStorage.setItem('userRole', response.data.role);
+            }
+            
             onLogin();
         } catch (error: any) {
             console.error('Login failed:', error);
