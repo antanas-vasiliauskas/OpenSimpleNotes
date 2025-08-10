@@ -24,9 +24,8 @@ export default function Register({ onRegister }: { onRegister: () => void }) {
                 RedirectUri: `${window.location.origin}/oauth-callback.html`  // Must match the OAuth flow
             });
             
-            const { token, role } = response.data;
-            localStorage.setItem('token', token);
-            localStorage.setItem('userRole', role);
+            // With cookie-based auth, we don't need to handle tokens manually
+            // The cookie should be set automatically by the server
             onRegister();
         } catch (error: any) {
             console.error('Google sign-up failed:', error);
@@ -53,11 +52,12 @@ export default function Register({ onRegister }: { onRegister: () => void }) {
         setError('');
         
         try {
-            const { data } = await api.post('auth/register', {
+            const response = await api.post('auth/register', {
                 email: formData.email,
                 password: formData.password
             });
-            localStorage.setItem('token', data.token);
+            // With cookie-based auth, we don't need to handle tokens manually
+            // The cookie should be set automatically by the server
             onRegister();
         } catch (error: any) {
             console.error('Registration failed:', error);

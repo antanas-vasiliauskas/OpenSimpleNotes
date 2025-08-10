@@ -3,7 +3,6 @@ import { Box, styled } from '@mui/material';
 import { Note } from '../types/notes';
 import { Outlet, useNavigate } from 'react-router-dom';
 import api from '../api/client';
-import { isTokenExpired } from '../utils/auth';
 import Sidebar from '../components/Sidebar';
 
 const PageContainer = styled(Box)({
@@ -19,7 +18,7 @@ const MainContent = styled(Box)({
 });
 
 interface NotesPageProps {
-    onLogout: () => void;
+    onLogout: () => Promise<void>;
 }
 
 export default function NotesPage({ onLogout }: NotesPageProps) {
@@ -27,28 +26,18 @@ export default function NotesPage({ onLogout }: NotesPageProps) {
     const [notes, setNotes] = useState<Note[]>([]);
 
     useEffect(() => {
-        const validateAndLoadNotes = async () => {
-            const token = localStorage.getItem('token');
-            if (token) {
-                if (isTokenExpired(token)) {
-                    onLogout();
-                    return;
-                }
-
-                try {
-                    await loadNotes();
-                } catch (error: any) {
-                    if (error.response?.status === 401) {
-                        onLogout();
-                    } else {
-                        console.error('Failed to load notes:', error);
-                    }
-                }
+        const loadNotesData = async () => {
+            try {
+                await loadNotes();
+            } catch (error: any) {
+                console.error('Failed to load notes:', error);
+                // Authentication errors are handled by the API interceptor
+                // which will trigger the auth-error event and update the auth state
             }
         };
 
-        validateAndLoadNotes();
-    }, [onLogout]);
+        loadNotesData();
+    }, []);
 
     const loadNotes = async () => {
         try {

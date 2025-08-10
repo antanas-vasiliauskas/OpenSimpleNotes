@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using OSN.Application.Features.Auth.Login;
 using OSN.Application.Features.Auth.Register;
 using OSN.Application.Features.Auth.GoogleSignIn;
+using OSN.Infrastructure.Services;
 
 namespace OSN;
 
@@ -12,9 +13,12 @@ namespace OSN;
 public class AuthController: ControllerBase
 {
     private readonly IMediator _mediator;
-    public AuthController(IMediator mediator) 
+    private readonly AuthService _authService;
+
+    public AuthController(IMediator mediator, AuthService authService) 
     {
         _mediator = mediator;
+        _authService = authService;
     }
 
     [HttpPost("login")]
@@ -48,5 +52,12 @@ public class AuthController: ControllerBase
         if (!result.IsSuccess)
             return BadRequest(new { message = result.Error });
         return Ok(result.Value);
+    }
+
+    [HttpPost("logout")]
+    public async Task<IActionResult> Logout()
+    {
+        _authService.RemoveAuthenticationCookie();
+        return Ok(new { message = "Logged out successfully" });
     }
 }

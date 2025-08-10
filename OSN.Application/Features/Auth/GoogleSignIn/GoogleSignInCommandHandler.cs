@@ -108,9 +108,10 @@ public class GoogleSignInCommandHandler : IRequestHandler<GoogleSignInCommand, R
                 await _db.SaveChangesAsync(ct);
             }
 
-            var token = _authService.GenearateToken(existingUser);
+            // Set authentication cookie instead of returning token
+            _authService.SetAuthenticationCookie(existingUser);
 
-            return Result<GoogleSignInResponse>.Success(new GoogleSignInResponse(token, existingUser.Role, isNewUser));
+            return Result<GoogleSignInResponse>.Success(new GoogleSignInResponse(existingUser.Role, isNewUser));
         }
         catch (HttpRequestException ex)
         {
