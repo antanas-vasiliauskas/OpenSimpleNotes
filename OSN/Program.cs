@@ -8,7 +8,6 @@ using OSN.Application.Features.Auth.Login;
 using OSN.Domain.Models;
 using OSN.Infrastructure;
 using OSN.Infrastructure.Services;
-using OSN.Infrastructure.Authentication;
 using System.Text;
 
 // SuperUser
@@ -26,12 +25,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.AddSecurityDefinition("Cookie", new OpenApiSecurityScheme
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        Type = SecuritySchemeType.ApiKey,
-        In = ParameterLocation.Cookie,
-        Name = "auth-token",
-        Description = "JWT token stored in HTTP-only cookie"
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT"
     });
 
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -42,7 +40,7 @@ builder.Services.AddSwaggerGen(c =>
                 Reference = new OpenApiReference
                 {
                     Type = ReferenceType.SecurityScheme,
-                    Id = "Cookie"
+                    Id = "Bearer"
                 }
             },
             Array.Empty<string>()
@@ -50,10 +48,24 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// Replace JWT Bearer authentication with custom JWT Cookie authentication
-builder.Services.AddAuthentication(JwtCookieAuthenticationOptions.DefaultScheme)
-    .AddScheme<JwtCookieAuthenticationOptions, JwtCookieAuthenticationHandler>(
-        JwtCookieAuthenticationOptions.DefaultScheme, options => { });
+
+
+
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+        };
+    });
 
 // For controller level authorization
 builder.Services.AddAuthorization(options =>
@@ -79,28 +91,29 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(
     typeof(User).Assembly          // OSN.Domain
 ));
 
+
+
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<PasswordHasher>();
 builder.Services.AddScoped<GoogleOAuth2Service>();
-builder.Services.AddScoped<CookieService>();
 builder.Services.AddHttpClient<GoogleOAuth2Service>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
-// Update CORS to allow credentials (cookies)
 builder.Services.AddCors(options => {
-    options.AddPolicy("AllowCredentials", builder => {
-        builder.WithOrigins("http://localhost:3000", "https://yourdomain.com") // Specify exact origins
-               .AllowAnyMethod()
-               .AllowAnyHeader()
-               .AllowCredentials(); // Allow cookies
+    options.AddPolicy("AllowAll", builder => {
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()  // Explicitly allow OPTIONS
+               .AllowAnyHeader();
     });
 });
 
+
+
 var app = builder.Build();
 
-app.UseCors("AllowCredentials");
+app.UseCors("AllowAll");
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 if (app.Environment.IsDevelopment())
@@ -112,6 +125,7 @@ if (app.Environment.IsDevelopment())
     });
     app.MapGet("/", () => Results.Redirect("/swagger")).AllowAnonymous();
 }
+
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -133,6 +147,7 @@ using (var scope = app.Services.CreateScope())
         }
     }
 }
+
 
 app.MapControllers();
 

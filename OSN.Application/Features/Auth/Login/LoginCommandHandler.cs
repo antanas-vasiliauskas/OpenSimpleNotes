@@ -1,4 +1,5 @@
 ﻿using MediatR;
+
 using Microsoft.EntityFrameworkCore;
 using OSN.Infrastructure;
 using OSN.Infrastructure.Services;
@@ -37,9 +38,8 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<LoginRes
             return Result<LoginResponse>.Failure("Invalid password.");
         }
 
-        // Set authentication cookie instead of returning token
-        _authService.SetAuthenticationCookie(user);
+        var token = _authService.GenearateToken(user);
 
-        return Result<LoginResponse>.Success(new LoginResponse(user.Role));
+        return Result<LoginResponse>.Success(new LoginResponse(token, user.Role));
     }
 }

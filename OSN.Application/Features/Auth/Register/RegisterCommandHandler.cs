@@ -48,9 +48,8 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<Re
         _db.Users.Add(newUser);
         await _db.SaveChangesAsync(ct);
 
-        // Set authentication cookie instead of returning token
-        _authService.SetAuthenticationCookie(newUser);
+        var token = _authService.GenearateToken(newUser);
 
-        return Result<RegisterResponse>.Success(new RegisterResponse(newUser.Role));
+        return Result<RegisterResponse>.Success(new RegisterResponse(token, newUser.Role));
     }
 }

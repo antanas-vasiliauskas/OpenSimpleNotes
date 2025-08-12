@@ -1,4 +1,4 @@
-import { Box, CssBaseline, CircularProgress, Typography } from '@mui/material';
+import { Box, CssBaseline } from '@mui/material';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import LoginPage from './pages/LoginPage';
@@ -8,27 +8,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import NoteView from './components/NoteView';
 
 function AppRoutes() {
-    const { isAuthenticated, loading, login, logout } = useAuth();
-
-    if (loading) {
-        return (
-            <Box 
-                sx={{ 
-                    display: 'flex', 
-                    flexDirection: 'column',
-                    alignItems: 'center', 
-                    justifyContent: 'center', 
-                    height: '100vh',
-                    gap: 2
-                }}
-            >
-                <CircularProgress />
-                <Typography variant="body1" color="text.secondary">
-                    Loading...
-                </Typography>
-            </Box>
-        );
-    }
+    const { isAuthenticated, login, logout } = useAuth();
 
     return (
         <Box sx={{ display: 'flex', height: '100vh' }}>
