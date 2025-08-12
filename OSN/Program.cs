@@ -102,10 +102,26 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 builder.Services.AddCors(options => {
-    options.AddPolicy("AllowAll", builder => {
-        builder.AllowAnyOrigin()
-               .AllowAnyMethod()  // Explicitly allow OPTIONS
-               .AllowAnyHeader();
+    options.AddPolicy("AllowSpecificOrigins", policyBuilder => {
+        if (builder.Environment.IsDevelopment())
+        {
+            policyBuilder.WithOrigins(
+                "http://localhost:3000",
+                "https://localhost:3000",
+                "https://black-field-0f7ce1903.2.azurestaticapps.net",
+                "https://opensimplenotes.com"
+            );
+        }
+        else
+        {
+            policyBuilder.WithOrigins(
+                "https://black-field-0f7ce1903.2.azurestaticapps.net",
+                "https://opensimplenotes.com"
+            );
+        }
+        policyBuilder
+            .AllowAnyMethod()
+            .AllowAnyHeader();
     });
 });
 
@@ -113,7 +129,7 @@ builder.Services.AddCors(options => {
 
 var app = builder.Build();
 
-app.UseCors("AllowAll");
+app.UseCors("AllowSpecificOrigins");
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 if (app.Environment.IsDevelopment())
