@@ -91,7 +91,7 @@ builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 // Update CORS to allow credentials (cookies)
 builder.Services.AddCors(options => {
     options.AddPolicy("AllowCredentials", builder => {
-        builder.WithOrigins("http://localhost:3000", "https://black-field-0f7ce1903.2.azurestaticapps.net", "opensimplenotes.com")
+        builder.WithOrigins("http://localhost:3000", "https://yourdomain.com") // Specify exact origins
                .AllowAnyMethod()
                .AllowAnyHeader()
                .AllowCredentials(); // Allow cookies
