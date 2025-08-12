@@ -1,41 +1,15 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, TextField, Box, Typography, Divider, Alert } from '@mui/material';
 import api from '../api/client';
 import LandingPresentation from './LandingPresentation';
-import { initGoogleAuth, promptGoogleSignIn } from '../utils/googleAuth';
+import GuestLoginButton from './GuestLoginButton';
+import GoogleSignInButton from './GoogleSignInButton';
 
 export default function Login({ onLogin }: { onLogin: () => void }) {
     const [credentials, setCredentials] = useState({ email: '', password: '' });
     const [error, setError] = useState<string>('');
     const [loading, setLoading] = useState(false);
-
-    const handleGoogleSuccess = useCallback(async (authorizationCode: string) => {
-        setLoading(true);
-        setError('');
-        
-        try {
-            const response = await api.post('auth/google-signin', {
-                AuthorizationCode: authorizationCode,
-                RedirectUri: `${window.location.origin}/oauth-callback.html`  // Must match the OAuth flow
-            });
-            
-            const { token, role } = response.data;
-            localStorage.setItem('token', token);
-            localStorage.setItem('userRole', role);
-            onLogin();
-        } catch (error: any) {
-            console.error('Google sign-in failed:', error);
-            setError(error.response?.data?.message || 'Google sign-in failed. Please try again.');
-        } finally {
-            setLoading(false);
-        }
-    }, [onLogin]);
-
-    useEffect(() => {
-        // Initialize Google Auth when component mounts
-        initGoogleAuth(handleGoogleSuccess);
-    }, [handleGoogleSuccess]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -43,8 +17,10 @@ export default function Login({ onLogin }: { onLogin: () => void }) {
         setError('');
         
         try {
-            const { data } = await api.post('auth/login', credentials);
-            localStorage.setItem('token', data.token);
+            const response = await api.post('auth/login', credentials);
+            const {token, role} = response.data;
+            localStorage.setItem('token', token);
+            localStorage.setItem('userRole', role);
             onLogin();
         } catch (error: any) {
             console.error('Login failed:', error);
@@ -52,10 +28,6 @@ export default function Login({ onLogin }: { onLogin: () => void }) {
         } finally {
             setLoading(false);
         }
-    };
-
-    const handleGoogleSignIn = () => {
-        promptGoogleSignIn();
     };
 
     return (
@@ -146,36 +118,19 @@ export default function Login({ onLogin }: { onLogin: () => void }) {
                         
                         <Divider sx={{ my: 2 }}>or</Divider>
                         
-                        <Button
-                            onClick={handleGoogleSignIn}
-                            variant="outlined"
-                            fullWidth
-                            size="large"
+                        <GoogleSignInButton 
+                            onLogin={onLogin}
                             disabled={loading}
-                            sx={{
-                                backgroundColor: 'white',
-                                color: 'black',
-                                border: '1px solid #dadce0',
-                                textTransform: 'none',
-                                '&:hover': {
-                                    backgroundColor: '#f8f9fa',
-                                    border: '1px solid #dadce0'
-                                },
-                                '&:disabled': {
-                                    backgroundColor: '#f8f9fa',
-                                    border: '1px solid #dadce0'
-                                }
-                            }}
-                        >
-                            <Box component="img" 
-                                src="https://developers.google.com/identity/images/g-logo.png" 
-                                alt="Google" 
-                                sx={{ width: 20, height: 20, mr: 2 }} 
-                            />
-                            Continue with Google
-                        </Button>
+                            onError={setError}
+                        />
                         
-                        <Typography variant="body2" align="center" sx={{ mt: 3 }}>
+                        <GuestLoginButton 
+                            onLogin={onLogin}
+                            disabled={loading}
+                            onError={setError}
+                        />
+                        
+                        <Typography variant="body2" align="center" sx={{ mt: 2 }}>
                             Don't have an account yet?{' '}
                             <Link 
                                 to="/register" 

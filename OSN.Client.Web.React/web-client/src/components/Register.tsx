@@ -1,9 +1,10 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, TextField, Box, Typography, Divider, Alert } from '@mui/material';
 import api from '../api/client';
 import LandingPresentation from './LandingPresentation';
-import { initGoogleAuth, promptGoogleSignIn } from '../utils/googleAuth';
+import GuestLoginButton from './GuestLoginButton';
+import GoogleSignInButton from './GoogleSignInButton';
 
 export default function Register({ onRegister }: { onRegister: () => void }) {
     const [formData, setFormData] = useState({ 
@@ -13,33 +14,6 @@ export default function Register({ onRegister }: { onRegister: () => void }) {
     });
     const [error, setError] = useState<string>('');
     const [loading, setLoading] = useState(false);
-
-    const handleGoogleSuccess = useCallback(async (authorizationCode: string) => {
-        setLoading(true);
-        setError('');
-        
-        try {
-            const response = await api.post('auth/google-signin', {
-                AuthorizationCode: authorizationCode,
-                RedirectUri: `${window.location.origin}/oauth-callback.html`  // Must match the OAuth flow
-            });
-            
-            const { token, role } = response.data;
-            localStorage.setItem('token', token);
-            localStorage.setItem('userRole', role);
-            onRegister();
-        } catch (error: any) {
-            console.error('Google sign-up failed:', error);
-            setError(error.response?.data?.message || 'Google sign-up failed. Please try again.');
-        } finally {
-            setLoading(false);
-        }
-    }, [onRegister]);
-
-    useEffect(() => {
-        // Initialize Google Auth when component mounts
-        initGoogleAuth(handleGoogleSuccess);
-    }, [handleGoogleSuccess]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -65,10 +39,6 @@ export default function Register({ onRegister }: { onRegister: () => void }) {
         } finally {
             setLoading(false);
         }
-    };
-
-    const handleGoogleSignUp = () => {
-        promptGoogleSignIn();
     };
 
     return (
@@ -169,36 +139,20 @@ export default function Register({ onRegister }: { onRegister: () => void }) {
                         
                         <Divider sx={{ my: 2 }}>or</Divider>
                         
-                        <Button
-                            onClick={handleGoogleSignUp}
-                            variant="outlined"
-                            fullWidth
-                            size="large"
+                        <GoogleSignInButton 
+                            onLogin={onRegister}
                             disabled={loading}
-                            sx={{
-                                backgroundColor: 'white',
-                                color: 'black',
-                                border: '1px solid #dadce0',
-                                textTransform: 'none',
-                                '&:hover': {
-                                    backgroundColor: '#f8f9fa',
-                                    border: '1px solid #dadce0'
-                                },
-                                '&:disabled': {
-                                    backgroundColor: '#f8f9fa',
-                                    border: '1px solid #dadce0'
-                                }
-                            }}
-                        >
-                            <Box component="img" 
-                                src="https://developers.google.com/identity/images/g-logo.png" 
-                                alt="Google" 
-                                sx={{ width: 20, height: 20, mr: 2 }} 
-                            />
-                            Continue with Google
-                        </Button>
+                            onError={setError}
+                            buttonText="Continue with Google"
+                        />
                         
-                        <Typography variant="body2" align="center" sx={{ mt: 3 }}>
+                        <GuestLoginButton 
+                            onLogin={onRegister}
+                            disabled={loading}
+                            onError={setError}
+                        />
+                        
+                        <Typography variant="body2" align="center" sx={{ mt: 2 }}>
                             Already have an account?{' '}
                             <Link 
                                 to="/login" 
