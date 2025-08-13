@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using OSN.Application.Utils;
 using OSN.Domain.Models;
+using OSN.Domain.ValueObjects;
 using OSN.Infrastructure;
 using OSN.Infrastructure.Services;
 
@@ -24,8 +25,10 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<Re
     {
         var request = command.Request;
 
-        // Check if a verified user with this email already exists
-        var existingUser = await _db.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == request.Email.ToLower(), ct);
+        var emailString = EmailString.Create(request.Email);
+
+        // Check if a verified user with this normalized email already exists
+        var existingUser = await _db.Users.FirstOrDefaultAsync(u => u.Email == emailString, ct);
         if (existingUser != null)
         {
             if (existingUser.GoogleSignIn != null)
@@ -39,9 +42,9 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<Re
         var verificationCode = VerificationCodeGenerator.GenerateVerificationCode();
         var expirationTime = DateTime.UtcNow.AddMinutes(15);
 
-        // Check for existing pending verification
+        // Check for existing pending verification with normalized email
         var existingPendingVerification = await _db.PendingVerifications
-            .FirstOrDefaultAsync(p => p.Email.ToLower() == request.Email.ToLower(), ct);
+            .FirstOrDefaultAsync(p => p.Email == emailString, ct);
 
         if (existingPendingVerification != null)
         {
@@ -53,11 +56,11 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<Re
         }
         else
         {
-            // Create new pending verification
+            // Create new pending verification with normalized email
             var newPendingVerification = new PendingVerification
             {
                 Id = Guid.NewGuid(),
-                Email = request.Email,
+                Email = emailString,
                 PasswordHash = hashedPassword,
                 CreatedAt = DateTime.UtcNow,
                 ExpiresAt = expirationTime,
@@ -71,6 +74,7 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<Re
 
         try
         {
+            // Send verification email to the original (display) email, but store normalized email in DB
             await _emailService.SendVerificationEmailAsync(request.Email, verificationCode);
         }
         catch (Exception ex)

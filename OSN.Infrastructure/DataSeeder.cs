@@ -1,5 +1,6 @@
 ﻿using Bogus;
 using OSN.Domain.Models;
+using OSN.Domain.ValueObjects;
 using OSN.Infrastructure.Services;
 
 namespace OSN.Infrastructure;
@@ -19,7 +20,7 @@ public class DataSeeder
         var hashedPassword = _passwordHasher.HashSHA256Password("password");
         var fakerUser = new Faker<User>()
             .RuleFor(u => u.Id, f => Guid.NewGuid())
-            .RuleFor(u => u.Email, f => f.Internet.Email())
+            .RuleFor(u => u.Email, f => EmailString.Create(f.Internet.Email()))
             .RuleFor(u => u.PasswordHash, f => hashedPassword)
             .RuleFor(u => u.Role, f => f.PickRandom(new List<string> { "User", "Admin", "SuperAdmin" }))
             .RuleFor(u => u.IsDeleted, f => f.Random.Bool())

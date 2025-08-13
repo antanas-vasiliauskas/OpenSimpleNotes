@@ -63,7 +63,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuerSigningKey = true,
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
         };
     });
 
@@ -154,8 +154,6 @@ using (var scope = app.Services.CreateScope())
     var passwordHasher = services.GetRequiredService<PasswordHasher>();
     if (app.Environment.IsDevelopment())
     {
-        // dotnet ef database update --connection "your-remote-connection-string"
-        // to update remote. Can't do it in code, it is security vulnerability.
         context.Database.Migrate();
         if (!context.Users.Any())
         {

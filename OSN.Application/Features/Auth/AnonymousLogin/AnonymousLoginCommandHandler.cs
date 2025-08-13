@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using OSN.Domain.Models;
+using OSN.Domain.ValueObjects;
 using OSN.Infrastructure;
 using OSN.Infrastructure.Services;
 
@@ -20,13 +21,11 @@ public class AnonymousLoginCommandHandler : IRequestHandler<AnonymousLoginComman
     public async Task<Result<AnonymousLoginResponse>> Handle(AnonymousLoginCommand command, CancellationToken ct)
     {
         var request = command.Request;
-        User user;
-        bool isNewUser = request.GuestId == null;
+        User? user;
 
-        if (!isNewUser)
+        if (request.GuestId != null)
         {
-            // Try to find existing anonymous user
-            user = await _db.Users.FirstOrDefaultAsync(u => u.Id == request.GuestId.Value && u.Email == string.Empty && !u.IsDeleted, ct);
+            user = await _db.Users.FirstOrDefaultAsync(u => u.Id == request.GuestId.Value && u.Email == null && !u.IsDeleted, ct);
             
             if (user == null)
             {
@@ -34,12 +33,11 @@ public class AnonymousLoginCommandHandler : IRequestHandler<AnonymousLoginComman
             }
         }
         else
-        {
-            // Create new anonymous user
+        {   
             user = new User
             {
                 Id = Guid.NewGuid(),
-                Email = string.Empty,
+                Email = null,
                 PasswordHash = string.Empty,
                 Role = RoleHierarchy.UserRole,
                 IsDeleted = false,
@@ -52,6 +50,7 @@ public class AnonymousLoginCommandHandler : IRequestHandler<AnonymousLoginComman
 
         var token = _authService.GenearateToken(user);
 
+        bool isNewUser = request.GuestId == null;
         return Result<AnonymousLoginResponse>.Success(new AnonymousLoginResponse(token, user.Role, user.Id, isNewUser));
     }
 }

@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using OSN.Domain.Models;
+using OSN.Domain.ValueObjects;
 using OSN.Infrastructure;
 using OSN.Infrastructure.Services;
 
@@ -21,8 +22,11 @@ public class VerifyEmailCommandHandler : IRequestHandler<VerifyEmailCommand, Res
     {
         var request = command.Request;
 
+        // Create and normalize email
+        var emailString = EmailString.Create(request.Email);
+
         var pendingVerification = await _db.PendingVerifications
-            .FirstOrDefaultAsync(p => p.Email.ToLower() == request.Email.ToLower(), ct);
+            .FirstOrDefaultAsync(p => p.Email == emailString, ct);
 
         if (pendingVerification == null)
         {
@@ -42,7 +46,7 @@ public class VerifyEmailCommandHandler : IRequestHandler<VerifyEmailCommand, Res
         }
 
         // Check if user already exists (shouldn't happen but safety check)
-        var existingUser = await _db.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == request.Email.ToLower(), ct);
+        var existingUser = await _db.Users.FirstOrDefaultAsync(u => u.Email == emailString, ct);
         if (existingUser != null)
         {
             _db.PendingVerifications.Remove(pendingVerification);
@@ -50,11 +54,11 @@ public class VerifyEmailCommandHandler : IRequestHandler<VerifyEmailCommand, Res
             return Result<VerifyEmailResponse>.Failure("User with this email already exists.");
         }
 
-        // Create the new user
+        // Create the new user with normalized email
         var newUser = new User
         {
             Id = Guid.NewGuid(),
-            Email = pendingVerification.Email,
+            Email = emailString,
             PasswordHash = pendingVerification.PasswordHash,
             Role = RoleHierarchy.UserRole,
             IsDeleted = false,

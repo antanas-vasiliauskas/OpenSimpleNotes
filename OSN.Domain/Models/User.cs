@@ -1,10 +1,13 @@
-﻿namespace OSN.Domain.Models;
+﻿using OSN.Domain.ValueObjects;
+
+namespace OSN.Domain.Models;
+
 public record User
 {
     public Guid Id { get; set; }
-    public string Email { get; set; } = string.Empty;
+    public EmailString? Email { get; set; }
     public string PasswordHash { get; set; } = string.Empty;
-    public string Role { get; set; } = string.Empty; // "User", "Admin", "SuperAdmin"
+    public string Role { get; set; } = string.Empty;
     public bool IsDeleted { get; init; }
     public DateTime CreatedAt { get; set; }
 

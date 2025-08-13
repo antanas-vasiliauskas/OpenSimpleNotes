@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Google.Apis.Auth;
 using OSN.Domain.Models;
+using OSN.Domain.ValueObjects;
 using OSN.Infrastructure;
 using OSN.Infrastructure.Services;
 
@@ -49,8 +50,11 @@ public class GoogleSignInCommandHandler : IRequestHandler<GoogleSignInCommand, R
                 return Result<GoogleSignInResponse>.Failure("Invalid Google ID token.");
             }
 
+            // Create and normalize email from Google payload
+            var emailString = EmailString.Create(payload.Email);
+
             var existingUser = await _db.Users
-                .FirstOrDefaultAsync(u => u.Email == payload.Email, ct);
+                .FirstOrDefaultAsync(u => u.Email == emailString, ct);
             
             bool isNewUser = false;
 
@@ -59,7 +63,7 @@ public class GoogleSignInCommandHandler : IRequestHandler<GoogleSignInCommand, R
                 existingUser = new User
                 {
                     Id = Guid.NewGuid(),
-                    Email = payload.Email,
+                    Email = emailString,
                     PasswordHash = "", // No password for Google users
                     Role = RoleHierarchy.UserRole,
                     IsDeleted = false,

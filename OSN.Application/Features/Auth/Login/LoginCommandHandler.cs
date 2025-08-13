@@ -1,6 +1,6 @@
 ﻿using MediatR;
-
 using Microsoft.EntityFrameworkCore;
+using OSN.Domain.ValueObjects;
 using OSN.Infrastructure;
 using OSN.Infrastructure.Services;
 
@@ -24,7 +24,11 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<LoginRes
     public async Task<Result<LoginResponse>> Handle(LoginCommand command, CancellationToken ct)
     {
         var request = command.Request;
-        var user = await _db.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == request.Email.ToLower(), ct);
+
+        // Create and normalize email
+        var emailString = EmailString.Create(request.Email);
+
+        var user = await _db.Users.FirstOrDefaultAsync(u => u.Email == emailString, ct);
 
         if (user == null)
         {

@@ -1,6 +1,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using OSN.Application.Utils;
+using OSN.Domain.ValueObjects;
 using OSN.Infrastructure;
 using OSN.Infrastructure.Services;
 
@@ -21,8 +22,12 @@ public class VerifyResendCommandHandler : IRequestHandler<VerifyResendCommand, R
     {
         var request = command.Request;
 
+        // Create and normalize email
+        var emailString = EmailString.Create(request.Email);
+
+
         // Check if user already exists
-        var existingUser = await _db.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == request.Email.ToLower(), ct);
+        var existingUser = await _db.Users.FirstOrDefaultAsync(u => u.Email == emailString, ct);
         if (existingUser != null)
         {
             return Result<VerifyResendResponse>.Failure("User with this email is already verified.");
@@ -30,7 +35,7 @@ public class VerifyResendCommandHandler : IRequestHandler<VerifyResendCommand, R
 
         // Find pending verification
         var pendingVerification = await _db.PendingVerifications
-            .FirstOrDefaultAsync(p => p.Email.ToLower() == request.Email.ToLower(), ct);
+            .FirstOrDefaultAsync(p => p.Email == emailString, ct);
 
         if (pendingVerification == null)
         {
@@ -48,6 +53,7 @@ public class VerifyResendCommandHandler : IRequestHandler<VerifyResendCommand, R
 
         try
         {
+            // Send verification email to the original email, not the normalized one
             await _emailService.SendVerificationEmailAsync(request.Email, newVerificationCode);
         }
         catch (Exception ex)

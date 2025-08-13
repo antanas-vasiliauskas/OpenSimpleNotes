@@ -18,8 +18,8 @@ public class GoogleOAuth2Service
     {
         try
         {
-            var clientId = _configuration["Authentication:Google:ClientId"];
-            var clientSecret = _configuration["Authentication:Google:ClientSecret"];
+            var clientId = _configuration["Authentication:Google:ClientId"]!;
+            var clientSecret = _configuration["Authentication:Google:ClientSecret"]!;
 
             // Exchange authorization code for tokens
             var tokenRequest = new Dictionary<string, string>

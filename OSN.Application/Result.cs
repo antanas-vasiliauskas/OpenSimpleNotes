@@ -2,11 +2,11 @@
 
 public class Result<T>
 {
-    public T Value { get; }
+    public T? Value { get; }
     public bool IsSuccess { get; }
-    public string Error { get; }
+    public string? Error { get; }
 
-    private Result(T value, bool isSuccess, string error)
+    private Result(T? value, bool isSuccess, string? error)
     {
         Value = value;
         IsSuccess = isSuccess;

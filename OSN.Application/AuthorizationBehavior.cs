@@ -5,7 +5,8 @@ using System.Security.Claims;
 
 namespace OSN.Application;
 
-public class AuthorizationBehavior<TRequest, TResponse>: IPipelineBehavior<TRequest, TResponse>
+public class AuthorizationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+    where TRequest : notnull
 {
     private IHttpContextAccessor _httpContentAccessor;
     public AuthorizationBehavior(IHttpContextAccessor httpContentAccessor)

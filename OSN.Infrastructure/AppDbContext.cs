@@ -1,10 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OSN.Domain.Models;
+using OSN.Domain.ValueObjects;
+using OSN.Infrastructure.ValueConverters;
 
 namespace OSN.Infrastructure;
 
 public class AppDbContext : DbContext
 {
+    // migration commands:
+    // dotnet ef migrations add <MigrationName> --project ..\OSN.Infrastructure\OSN.Infrastructure.csproj --startup-project .\OSN.csproj
+    // dotnet ef database update
+    // dotnet ef database update --connection "your-remote-connection-string"
     public DbSet<User> Users { get; set; }
     public DbSet<Note> Notes { get; set; }
     public DbSet<GoogleSignInFields> GoogleSignInFields { get; set; }
@@ -17,6 +23,7 @@ public class AppDbContext : DbContext
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
         configurationBuilder.Properties<DateTime>().HaveConversion<DateTimeToUtcConverter>();
+        configurationBuilder.Properties<EmailString>().HaveConversion<EmailStringConverter>();
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
