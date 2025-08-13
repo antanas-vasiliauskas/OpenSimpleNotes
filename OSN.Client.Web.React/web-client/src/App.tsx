@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import EmailVerificationPage from './pages/EmailVerificationPage';
 import NotesPage from './pages/NotesPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import NoteView from './components/NoteView';
@@ -19,6 +20,9 @@ function AppRoutes() {
                 } />
                 <Route path="/register" element={
                     <RegisterPage isAuthenticated={isAuthenticated} onRegister={login} />
+                } />
+                <Route path="/verify-email" element={
+                    <EmailVerificationPage isAuthenticated={isAuthenticated} onVerify={login} />
                 } />
                 <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} />}>
                     <Route path="/" element={<NotesPage onLogout={logout} />}>

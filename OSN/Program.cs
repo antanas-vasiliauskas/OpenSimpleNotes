@@ -97,6 +97,7 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(builder
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<PasswordHasher>();
 builder.Services.AddScoped<GoogleOAuth2Service>();
+builder.Services.AddScoped<EmailService>();
 builder.Services.AddHttpClient<GoogleOAuth2Service>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();

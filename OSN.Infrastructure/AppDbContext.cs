@@ -8,6 +8,7 @@ public class AppDbContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<Note> Notes { get; set; }
     public DbSet<GoogleSignInFields> GoogleSignInFields { get; set; }
+    public DbSet<PendingVerification> PendingVerifications { get; set; }
 
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
@@ -58,6 +59,13 @@ public class AppDbContext : DbContext
                 .WithOne(u => u.GoogleSignIn)
                 .HasForeignKey<GoogleSignInFields>(g => g.UserId)
                 .IsRequired();
+        });
+
+        modelBuilder.Entity<PendingVerification>(x =>
+        {
+            x.HasKey(p => p.Id);
+
+            x.HasIndex(p => p.Email).IsUnique();
         });
     }
 }

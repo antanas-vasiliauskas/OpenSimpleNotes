@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button, TextField, Box, Typography, Divider, Alert } from '@mui/material';
 import api from '../api/client';
 import LandingPresentation from './LandingPresentation';
@@ -7,6 +7,7 @@ import GuestLoginButton from './GuestLoginButton';
 import GoogleSignInButton from './GoogleSignInButton';
 
 export default function Register({ onRegister }: { onRegister: () => void }) {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({ 
         email: '', 
         password: '', 
@@ -27,12 +28,17 @@ export default function Register({ onRegister }: { onRegister: () => void }) {
         setError('');
         
         try {
-            const { data } = await api.post('auth/register', {
+            const response = await api.post('auth/register', {
                 email: formData.email,
                 password: formData.password
             });
-            localStorage.setItem('token', data.token);
-            onRegister();
+            const { message } = response.data;
+            console.log(message);
+            
+            // Navigate to email verification with the user's email
+            navigate('/verify-email', { 
+                state: { email: formData.email } 
+            });
         } catch (error: any) {
             console.error('Registration failed:', error);
             setError(error.response?.data?.message || 'Registration failed. Please try again.');

@@ -29,7 +29,7 @@ public class CreateNoteCommandHandler : IRequestHandler<CreateNoteCommand, Resul
         };
 
         _db.Notes.Add(note);
-        _db.SaveChangesAsync(ct);
+        await _db.SaveChangesAsync(ct);
 
         return Result<NoteResponse>.Success(new NoteResponse(note.Id, note.Title, note.Content, note.IsPinned, note.CreatedAt, note.UpdatedAt));
     }
