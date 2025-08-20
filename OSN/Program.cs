@@ -1,3 +1,4 @@
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -128,20 +129,22 @@ public class Program
                     policy.RequireRole(allowedRoles));
             }
             // Set fallback policy to be DefaultPolicy (UserPolicy)
-            // Fallback policy still requires [Authorize]
-            // just not need to specify [Authorize(Policy = RoleHierarchy.UserPolicy)]
+            // Fallback policy applied if there is [Authorize] attribute without arguments or nothing at all.
             options.FallbackPolicy = new AuthorizationPolicyBuilder()
                 .RequireAuthenticatedUser()
                 .RequireRole(RoleHierarchy._hierarchy[RoleHierarchy.DefaultPolicy])
                 .Build();
         });
 
-        builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(
-            typeof(Program).Assembly,      // OSN
-            typeof(LoginCommand).Assembly, // OSN.Application
-            typeof(AppDbContext).Assembly, // OSN.Infrastructure
-            typeof(User).Assembly          // OSN.Domain
-        ));
+        builder.Services.AddMediatR(cfg =>
+        {
+            cfg.RegisterServicesFromAssemblies(
+                typeof(LoginCommand).Assembly // CommandHandlers in OSN.Application
+            );
+        });
+
+        // Doesn't pickup automatically.
+        builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(AuthorizationBehavior<,>));
 
 
 
