@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.RateLimiting;
 using OSN.Application.Features.Auth.Login;
 using OSN.Application.Features.Auth.Register;
 using OSN.Application.Features.Auth.GoogleSignIn;
@@ -12,6 +13,7 @@ namespace OSN;
 
 [ApiController]
 [Route("api/[controller]")]
+[EnableRateLimiting("AuthPolicy")]
 public class AuthController: ControllerBase
 {
     private readonly IMediator _mediator;

@@ -2,6 +2,7 @@
 **/PublishProfiles/
 **/ServiceDependencies/
 
+
 ## Production secrets - DO NOT COMMIT
 appsettings.Production.json
 
@@ -24,6 +25,7 @@ appsettings.Development.json
 ## Visual Studio
 .vs/
 *.csproj.user
+.github/
 
 ## VS Code
 .vscode/
