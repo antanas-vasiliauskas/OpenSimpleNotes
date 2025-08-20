@@ -1,7 +1,6 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using OSN.Domain.Models;
-using OSN.Domain.ValueObjects;
 using OSN.Infrastructure;
 using OSN.Infrastructure.Services;
 
@@ -39,7 +38,7 @@ public class AnonymousLoginCommandHandler : IRequestHandler<AnonymousLoginComman
                 Id = Guid.NewGuid(),
                 Email = null,
                 PasswordHash = string.Empty,
-                Role = RoleHierarchy.UserRole,
+                Role = RoleHierarchy.GuestRole,
                 IsDeleted = false,
                 CreatedAt = DateTime.UtcNow
             };

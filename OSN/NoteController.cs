@@ -11,7 +11,7 @@ using OSN.Application.Features.Notes.Update;
 namespace OSN;
 
 [ApiController]
-[Authorize(Policy = RoleHierarchy.UserPolicy)]
+[Authorize(Policy = RoleHierarchy.GuestPolicy)]
 [Route("api/[controller]")]
 public class NoteController: ControllerBase
 {

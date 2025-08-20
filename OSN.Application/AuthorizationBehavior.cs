@@ -16,6 +16,7 @@ public class AuthorizationBehavior<TRequest, TResponse> : IPipelineBehavior<TReq
 
     public async Task<TResponse> Handle(TRequest command, RequestHandlerDelegate<TResponse> next, CancellationToken ct)
     {
+        Console.WriteLine($"AuthorizationBehavior: {command.GetType().Name}");
         if (command.GetType().GetCustomAttribute<AllowAnonymousCommandAttribute>() != null)
         {
             return await next();

@@ -6,17 +6,20 @@ public static class RoleHierarchy
     // Use Authorize(Policy=".."), NOT Authorize(Roles="..") FOR HIERARCHY.
     // Hierarchy is implemented in Program.cs for Controller level authorization.
     // AND AuthorizationBehavior.cs for Command/Query level authorization.
+    public const string GuestPolicy = "GuestPolicy";
     public const string UserPolicy = "UserPolicy";
     public const string AdminPolicy = "AdminPolicy";
     public const string SuperAdminPolicy = "SuperAdminPolicy";
     public const string DefaultPolicy = UserPolicy;
 
+    public const string GuestRole = "Guest";
     public const string UserRole = "User";
     public const string AdminRole = "Admin";
     public const string SuperAdminRole = "SuperAdmin";
 
     public static readonly IReadOnlyDictionary<string, string[]> _hierarchy = new Dictionary<string, string[]>
     {
+        [GuestPolicy] = [GuestRole, UserRole, AdminRole, SuperAdminRole],
         [UserPolicy] = [UserRole, AdminRole, SuperAdminRole],
         [AdminPolicy] = [AdminRole, SuperAdminRole],
         [SuperAdminPolicy] = [SuperAdminRole]
