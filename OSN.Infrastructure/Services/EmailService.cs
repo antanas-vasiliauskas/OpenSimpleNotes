@@ -1,10 +1,11 @@
 using System.Net;
 using System.Net.Mail;
 using Microsoft.Extensions.Configuration;
+using OSN.Application.Services;
 
 namespace OSN.Infrastructure.Services;
 
-public class EmailService
+public class EmailService : IEmailService
 {
     private readonly IConfiguration _configuration;
 

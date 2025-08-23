@@ -1,4 +1,4 @@
-﻿namespace OSN.Application;
+﻿namespace OSN.Domain.Core;
 
 public static class RoleHierarchy
 {

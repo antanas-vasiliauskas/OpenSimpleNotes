@@ -1,30 +1,35 @@
 ﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
-using OSN.Infrastructure;
+using OSN.Application.Repositories;
+using OSN.Application.Services;
 
 namespace OSN.Application.Features.Notes.Delete;
 
 public class DeleteNoteCommandHandler : IRequestHandler<DeleteNoteCommand, Result<Unit>>
 {
-    private readonly AppDbContext _db; // TODO: replace with repository
+    private readonly INoteRepository _noteRepository;
     private readonly ICurrentUserService _currentUser;
 
-    public DeleteNoteCommandHandler(AppDbContext db, ICurrentUserService currentUser)
+    public DeleteNoteCommandHandler(INoteRepository noteRepository, ICurrentUserService currentUser)
     {
-        _db = db;
+        _noteRepository = noteRepository;
         _currentUser = currentUser;
     }
 
     public async Task<Result<Unit>> Handle(DeleteNoteCommand command, CancellationToken ct)
     {
-        var note = await _db.Notes
-            .FirstOrDefaultAsync(n => n.Id == command.Id && n.UserId == _currentUser.UserId && !n.IsDeleted, ct)
-            ?? throw new NotFoundException("Note not found.");
+        // Enforce authorization in data layer by passing current user ID
+        var note = await _noteRepository.GetByIdAsync(command.Id, _currentUser.UserId, ct);
+
+        if(note == null)
+        {
+            return Result<Unit>.Failure("Note not found.");
+        }
 
         note.IsDeleted = true;
         note.UpdatedAt = DateTime.UtcNow;
 
-        await _db.SaveChangesAsync(ct); // Entities retrieved from db directly doesn't require _db.Notes.Update call.
+        _noteRepository.Update(note);
+        await _noteRepository.UnitOfWork.SaveChangesAsync(ct);
         return Result<Unit>.Success(Unit.Value);
     }
 }

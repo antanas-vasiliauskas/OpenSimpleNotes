@@ -24,9 +24,8 @@ public class AuthController: ControllerBase
 
     [HttpPost("login")]
     [AllowAnonymous]
-    public async Task<IActionResult> Login(LoginRequest request)
+    public async Task<IActionResult> Login(LoginCommand command)
     {
-        var command = new LoginCommand(request);
         var result = await _mediator.Send(command);
         if (!result.IsSuccess)
             return Unauthorized(new { message = result.Error });
@@ -35,9 +34,8 @@ public class AuthController: ControllerBase
 
     [HttpPost("register")]
     [AllowAnonymous]
-    public async Task<IActionResult> Register(RegisterRequest request)
+    public async Task<IActionResult> Register(RegisterCommand command)
     {
-        var command = new RegisterCommand(request);
         var result = await _mediator.Send(command);
         if (!result.IsSuccess)
             return BadRequest(new { message = result.Error });
@@ -46,9 +44,8 @@ public class AuthController: ControllerBase
 
     [HttpPost("verify")]
     [AllowAnonymous]
-    public async Task<IActionResult> VerifyEmail(VerifyEmailRequest request)
+    public async Task<IActionResult> VerifyEmail(VerifyEmailCommand command)
     {
-        var command = new VerifyEmailCommand(request);
         var result = await _mediator.Send(command);
         if (!result.IsSuccess)
             return BadRequest(new { message = result.Error });
@@ -57,9 +54,8 @@ public class AuthController: ControllerBase
 
     [HttpPost("verify-resend")]
     [AllowAnonymous]
-    public async Task<IActionResult> VerifyResend(VerifyResendRequest request)
+    public async Task<IActionResult> VerifyResend(VerifyResendCommand command)
     {
-        var command = new VerifyResendCommand(request);
         var result = await _mediator.Send(command);
         if (!result.IsSuccess)
             return BadRequest(new { message = result.Error });
@@ -68,9 +64,8 @@ public class AuthController: ControllerBase
 
     [HttpPost("google-signin")]
     [AllowAnonymous]
-    public async Task<IActionResult> GoogleSignIn(GoogleSignInRequest request)
+    public async Task<IActionResult> GoogleSignIn(GoogleSignInCommand command)
     {
-        var command = new GoogleSignInCommand(request);
         var result = await _mediator.Send(command);
         if (!result.IsSuccess)
             return BadRequest(new { message = result.Error });
@@ -79,9 +74,8 @@ public class AuthController: ControllerBase
 
     [HttpPost("anonymous-login")]
     [AllowAnonymous]
-    public async Task<IActionResult> AnonymousLogin(AnonymousLoginRequest request)
+    public async Task<IActionResult> AnonymousLogin(AnonymousLoginCommand command)
     {
-        var command = new AnonymousLoginCommand(request);
         var result = await _mediator.Send(command);
         if (!result.IsSuccess)
             return BadRequest(new { message = result.Error });

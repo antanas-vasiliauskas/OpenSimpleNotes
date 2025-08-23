@@ -1,4 +1,5 @@
 ﻿using Bogus;
+using OSN.Application.Services;
 using OSN.Domain.Models;
 using OSN.Domain.ValueObjects;
 using OSN.Infrastructure.Services;
@@ -8,8 +9,8 @@ namespace OSN.Infrastructure;
 public class DataSeeder
 {
     private readonly AppDbContext _db;
-    private readonly PasswordHasher _passwordHasher;
-    public DataSeeder(AppDbContext db, PasswordHasher passwordHasher)
+    private readonly IPasswordHasher _passwordHasher;
+    public DataSeeder(AppDbContext db, IPasswordHasher passwordHasher)
     {
         _db = db;
         _passwordHasher = passwordHasher;
@@ -17,7 +18,7 @@ public class DataSeeder
     public void Seed()
     {
         Randomizer.Seed = new Random(0);
-        var hashedPassword = _passwordHasher.HashSHA256Password("password");
+        var hashedPassword = _passwordHasher.HashPassword("password");
         var fakerUser = new Faker<User>()
             .RuleFor(u => u.Id, f => Guid.NewGuid())
             .RuleFor(u => u.Email, f => EmailString.Create(f.Internet.Email()))

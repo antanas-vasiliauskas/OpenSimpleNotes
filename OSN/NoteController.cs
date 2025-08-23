@@ -1,12 +1,13 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using OSN.Application;
 using OSN.Application.Features.Notes;
 using OSN.Application.Features.Notes.Create;
 using OSN.Application.Features.Notes.Delete;
 using OSN.Application.Features.Notes.Get;
+using OSN.Application.Features.Notes.GetAll;
 using OSN.Application.Features.Notes.Update;
+using OSN.Domain.Core;
 
 namespace OSN;
 
@@ -24,35 +25,46 @@ public class NoteController: ControllerBase
     [HttpGet]
     public async Task<ActionResult<List<NoteResponse>>> GetAll()
     {
-        var notes = await _mediator.Send(new GetAllNotesQuery());
-        return Ok(notes.Value);
+        var command = new GetAllNotesQuery();
+        var result = await _mediator.Send(command);
+        if(!result.IsSuccess)
+            return BadRequest(new { message = result.Error });
+        return Ok(result.Value);
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<NoteResponse>> GetById(Guid id)
+    public async Task<ActionResult<NoteResponse>> GetById(GetNoteByIdQuery command)
     {
-        var note = await _mediator.Send(new GetNoteByIdQuery(id));
-        return Ok(note.Value);
+        var result = await _mediator.Send(command);
+        if (!result.IsSuccess)
+            return BadRequest(new { message = result.Error });
+        return Ok(result.Value);
     }
 
     [HttpPost]
-    public async Task<ActionResult<NoteResponse>> Create(CreateNoteRequest request)
+    public async Task<ActionResult<NoteResponse>> Create(CreateNoteCommand command)
     {
-        var note = await _mediator.Send(new CreateNoteCommand(request));
-        return CreatedAtAction(nameof(GetById), new { id = note.Value.Id }, note.Value);
+        var result = await _mediator.Send(command);
+        if (!result.IsSuccess)
+            return BadRequest(new { message = result.Error });
+        return Ok(result.Value);
     }
 
-    [HttpPut("{id}")]
-    public async Task<ActionResult<NoteResponse>> Update(Guid id, UpdateNoteRequest request)
+    [HttpPut]
+    public async Task<ActionResult<NoteResponse>> Update(UpdateNoteCommand command)
     {
-        var note = await _mediator.Send(new UpdateNoteCommand(id, request));
-        return Ok(note.Value);
+        var result = await _mediator.Send(command);
+        if (!result.IsSuccess)
+            return BadRequest(new { message = result.Error });
+        return Ok(result.Value);
     }
 
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> Delete(Guid id)
+    [HttpDelete]
+    public async Task<IActionResult> Delete(DeleteNoteCommand command)
     {
-        await _mediator.Send(new DeleteNoteCommand(id));
+        var result = await _mediator.Send(command);
+        if (!result.IsSuccess)
+            return BadRequest(new { message = result.Error });
         return NoContent();
     }
 }

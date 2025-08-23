@@ -20,6 +20,7 @@
 	
 	<ItemGroup>
 		<ProjectReference Include="..\OSN.Domain\OSN.Domain.csproj" />
+		<ProjectReference Include="..\OSN.Application\OSN.Application.csproj" />
 	</ItemGroup>
 
 </Project>

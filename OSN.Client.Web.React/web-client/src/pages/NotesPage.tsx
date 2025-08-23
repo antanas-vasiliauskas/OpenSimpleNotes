@@ -75,7 +75,8 @@ export default function NotesPage({ onLogout }: NotesPageProps) {
 
     const handleDeleteNote = async (noteId: string) => {
         try {
-            await api.delete(`/note/${noteId}`);
+            var body = { id: noteId };
+            await api.delete(`/note`, { data: body });
             setNotes(prev => prev.filter(note => note.id !== noteId));
         } catch (error) {
             console.error('Failed to delete note:', error);

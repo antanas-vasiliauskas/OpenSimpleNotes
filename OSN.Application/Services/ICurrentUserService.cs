@@ -1,4 +1,4 @@
-﻿namespace OSN.Application;
+﻿namespace OSN.Application.Services;
 
 public interface ICurrentUserService
 {

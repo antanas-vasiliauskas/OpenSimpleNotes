@@ -1,4 +1,4 @@
-﻿namespace OSN.Application;
+﻿namespace OSN.Domain.Common.Global;
 
 public class Result<T>
 {
@@ -15,4 +15,5 @@ public class Result<T>
 
     public static Result<T> Success(T value) => new(value, true, null);
     public static Result<T> Failure(string error) => new(default, false, error);
+
 }

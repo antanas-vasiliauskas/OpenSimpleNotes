@@ -1,34 +1,36 @@
 using MediatR;
-using Microsoft.EntityFrameworkCore;
+using OSN.Application.Repositories;
+using OSN.Application.Services;
 using OSN.Application.Utils;
 using OSN.Domain.Models;
 using OSN.Domain.ValueObjects;
-using OSN.Infrastructure;
-using OSN.Infrastructure.Services;
 
 namespace OSN.Application.Features.Auth.Register;
 
 public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<RegisterResponse>>
 {
-    private readonly AppDbContext _db;
-    private readonly PasswordHasher _passwordHasher;
-    private readonly EmailService _emailService;
+    private readonly IUserRepository _userRepository;
+    private readonly IPendingVerificationRepository _pendingVerificationRepository;
+    private readonly IPasswordHasher _passwordHasher;
+    private readonly IEmailService _emailService;
 
-    public RegisterCommandHandler(AppDbContext db, PasswordHasher passwordHasher, EmailService emailService)
+    public RegisterCommandHandler(
+        IUserRepository userRepository,
+        IPendingVerificationRepository pendingVerificationRepository,
+        IPasswordHasher passwordHasher,
+        IEmailService emailService)
     {
-        _db = db;
+        _userRepository = userRepository;
+        _pendingVerificationRepository = pendingVerificationRepository;
         _passwordHasher = passwordHasher;
         _emailService = emailService;
     }
 
     public async Task<Result<RegisterResponse>> Handle(RegisterCommand command, CancellationToken ct)
     {
-        var request = command.Request;
+        var emailString = EmailString.Create(command.Email);
 
-        var emailString = EmailString.Create(request.Email);
-
-        // Check if a verified user with this normalized email already exists
-        var existingUser = await _db.Users.FirstOrDefaultAsync(u => u.Email == emailString, ct);
+        var existingUser = await _userRepository.GetUserByEmailAsync(emailString, ct);
         if (existingUser != null)
         {
             if (existingUser.GoogleSignIn != null)
@@ -38,26 +40,23 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<Re
             return Result<RegisterResponse>.Failure("User with this email already exists.");
         }
 
-        var hashedPassword = _passwordHasher.HashSHA256Password(request.Password);
-        var verificationCode = VerificationCodeGenerator.GenerateVerificationCode();
-        var expirationTime = DateTime.UtcNow.AddMinutes(15);
+        var hashedPassword = _passwordHasher.HashPassword(command.Password);
+        var verificationCode = VerificationCode.Generate();
+        var expirationTime = DateTime.UtcNow.AddMinutes(VerificationCode.ExpirationMinutes);
 
-        // Check for existing pending verification with normalized email
-        var existingPendingVerification = await _db.PendingVerifications
-            .FirstOrDefaultAsync(p => p.Email == emailString, ct);
+        var pendingVerification = await _pendingVerificationRepository.GetByEmailAsync(emailString, ct);
 
-        if (existingPendingVerification != null)
+        if (pendingVerification != null)
         {
-            // Update existing pending verification
-            existingPendingVerification.PasswordHash = hashedPassword;
-            existingPendingVerification.VerificationCode = verificationCode;
-            existingPendingVerification.ExpiresAt = expirationTime;
-            existingPendingVerification.CreatedAt = DateTime.UtcNow;
+            pendingVerification.PasswordHash = hashedPassword;
+            pendingVerification.VerificationCode = verificationCode;
+            pendingVerification.ExpiresAt = expirationTime;
+            pendingVerification.CreatedAt = DateTime.UtcNow;
+            _pendingVerificationRepository.Update(pendingVerification);
         }
         else
         {
-            // Create new pending verification with normalized email
-            var newPendingVerification = new PendingVerification
+            pendingVerification = new PendingVerification
             {
                 Id = Guid.NewGuid(),
                 Email = emailString,
@@ -67,24 +66,12 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, Result<Re
                 VerificationCode = verificationCode
             };
 
-            _db.PendingVerifications.Add(newPendingVerification);
+            _pendingVerificationRepository.Add(pendingVerification);
         }
 
-        await _db.SaveChangesAsync(ct);
+        await _userRepository.UnitOfWork.SaveChangesAsync(ct);
+        await _emailService.SendVerificationEmailAsync(emailString.NormalizedValue, verificationCode);
 
-        try
-        {
-            // Send verification email to the original (display) email, but store normalized email in DB
-            await _emailService.SendVerificationEmailAsync(request.Email, verificationCode);
-        }
-        catch (Exception ex)
-        {
-            // If email sending fails, we should still return success but log the error
-            // In a real application, you might want to implement retry logic or queue the email
-            // For now, we'll just return an error
-            return Result<RegisterResponse>.Failure($"Failed to send verification email: {ex.Message}");
-        }
-
-        return Result<RegisterResponse>.Success(new RegisterResponse("Verification email sent. Please check your email and verify your account."));
+        return Result<RegisterResponse>.Success(new RegisterResponse("Verification code sent to your email."));
     }
 }

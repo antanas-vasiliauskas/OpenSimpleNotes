@@ -1,49 +1,42 @@
 ﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
+using OSN.Application.Repositories;
+using OSN.Application.Services;
 using OSN.Domain.ValueObjects;
-using OSN.Infrastructure;
-using OSN.Infrastructure.Services;
 
 namespace OSN.Application.Features.Auth.Login;
 
 public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<LoginResponse>>
 {
-    // Obviously later add IUserRepository and IAuthService, so that no Infrastructure reference.
-    // Then remove infrastrucutre from dependencies and add Application to dependencies on infrastructure.
-    private readonly AppDbContext _db;
-    private readonly AuthService _authService;
-    private readonly PasswordHasher _passwordHasher;
+    private readonly IUserRepository _userRepository;
+    private readonly IAuthService _authService;
+    private readonly IPasswordHasher _passwordHasher;
 
-    public LoginCommandHandler(AppDbContext db, AuthService authService, PasswordHasher passwordHasher)
+    public LoginCommandHandler(IUserRepository userRepository, IAuthService authService, IPasswordHasher passwordHasher)
     {
-        _db = db;
+        _userRepository = userRepository;
         _authService = authService;
         _passwordHasher = passwordHasher;
     }
 
     public async Task<Result<LoginResponse>> Handle(LoginCommand command, CancellationToken ct)
     {
-        var request = command.Request;
+        var emailString = EmailString.Create(command.Email);
 
-        // Create and normalize email
-        var emailString = EmailString.Create(request.Email);
-
-        var user = await _db.Users.FirstOrDefaultAsync(u => u.Email == emailString, ct);
+        var user = await _userRepository.GetUserByEmailAsync(emailString, ct);
 
         if (user == null)
         {
-            return Result<LoginResponse>.Failure("Invalid email."); // being precise whether problem is with username or password is a slight security risk
+            return Result<LoginResponse>.Failure("Invalid email or password."); // User not found.
         }
 
-        var verificationSuccess = _passwordHasher.VerifySHA256Password(user.PasswordHash, request.Password);
+        var verificationSuccess = _passwordHasher.VerifyPassword(user.PasswordHash, command.Password);
 
         if (!verificationSuccess)
         {
-            return Result<LoginResponse>.Failure("Invalid password.");
+            return Result<LoginResponse>.Failure("Invalid email or password."); // Invalid password.
         }
 
-        var token = _authService.GenearateToken(user);
-
+        var token = _authService.GenearateJwtToken(user);
         return Result<LoginResponse>.Success(new LoginResponse(token, user.Role));
     }
 }

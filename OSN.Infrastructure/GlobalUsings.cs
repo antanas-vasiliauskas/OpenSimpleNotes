@@ -1,0 +1,1 @@
+﻿global using OSN.Domain.Common.Global;

@@ -1,32 +1,33 @@
 using MediatR;
-using Microsoft.EntityFrameworkCore;
+using OSN.Application.Repositories;
+using OSN.Application.Services;
+using OSN.Domain.Core;
 using OSN.Domain.Models;
 using OSN.Domain.ValueObjects;
-using OSN.Infrastructure;
-using OSN.Infrastructure.Services;
 
 namespace OSN.Application.Features.Auth.Verify;
 
 public class VerifyEmailCommandHandler : IRequestHandler<VerifyEmailCommand, Result<VerifyEmailResponse>>
 {
-    private readonly AppDbContext _db;
-    private readonly AuthService _authService;
+    private readonly IUserRepository _userRepository;
+    private readonly IPendingVerificationRepository _pendingVerificationRepository;
+    private readonly IAuthService _authService;
 
-    public VerifyEmailCommandHandler(AppDbContext db, AuthService authService)
+    public VerifyEmailCommandHandler(
+        IUserRepository userRepository, 
+        IPendingVerificationRepository pendingVerificationRepository, 
+        IAuthService authService)
     {
-        _db = db;
+        _userRepository = userRepository;
+        _pendingVerificationRepository = pendingVerificationRepository;
         _authService = authService;
     }
 
     public async Task<Result<VerifyEmailResponse>> Handle(VerifyEmailCommand command, CancellationToken ct)
     {
-        var request = command.Request;
+        var emailString = EmailString.Create(command.Email);
 
-        // Create and normalize email
-        var emailString = EmailString.Create(request.Email);
-
-        var pendingVerification = await _db.PendingVerifications
-            .FirstOrDefaultAsync(p => p.Email == emailString, ct);
+        var pendingVerification = await _pendingVerificationRepository.GetByEmailAsync(emailString, ct);
 
         if (pendingVerification == null)
         {
@@ -35,26 +36,24 @@ public class VerifyEmailCommandHandler : IRequestHandler<VerifyEmailCommand, Res
 
         if (pendingVerification.ExpiresAt < DateTime.UtcNow)
         {
-            _db.PendingVerifications.Remove(pendingVerification);
-            await _db.SaveChangesAsync(ct);
+            _pendingVerificationRepository.Remove(pendingVerification);
+            await _pendingVerificationRepository.UnitOfWork.SaveChangesAsync(ct);
             return Result<VerifyEmailResponse>.Failure("Verification code has expired. Please register again.");
         }
 
-        if (pendingVerification.VerificationCode != request.VerificationCode)
+        if (pendingVerification.VerificationCode != command.VerificationCode)
         {
             return Result<VerifyEmailResponse>.Failure("Invalid verification code.");
         }
 
-        // Check if user already exists (shouldn't happen but safety check)
-        var existingUser = await _db.Users.FirstOrDefaultAsync(u => u.Email == emailString, ct);
+        var existingUser = await _userRepository.GetUserByEmailAsync(emailString, ct);
         if (existingUser != null)
         {
-            _db.PendingVerifications.Remove(pendingVerification);
-            await _db.SaveChangesAsync(ct);
+            _pendingVerificationRepository.Remove(pendingVerification);
+            await _pendingVerificationRepository.UnitOfWork.SaveChangesAsync(ct);
             return Result<VerifyEmailResponse>.Failure("User with this email already exists.");
         }
 
-        // Create the new user with normalized email
         var newUser = new User
         {
             Id = Guid.NewGuid(),
@@ -65,12 +64,11 @@ public class VerifyEmailCommandHandler : IRequestHandler<VerifyEmailCommand, Res
             CreatedAt = DateTime.UtcNow
         };
 
-        _db.Users.Add(newUser);
-        _db.PendingVerifications.Remove(pendingVerification);
-        await _db.SaveChangesAsync(ct);
+        _userRepository.Add(newUser);
+        _pendingVerificationRepository.Remove(pendingVerification);
+        await _userRepository.UnitOfWork.SaveChangesAsync(ct);
 
-        var token = _authService.GenearateToken(newUser);
-
+        var token = _authService.GenearateJwtToken(newUser);
         return Result<VerifyEmailResponse>.Success(new VerifyEmailResponse(token, newUser.Role));
     }
 }

@@ -1,20 +1,23 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using OSN.Application.Services;
 using OSN.Domain.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Text;
 
 namespace OSN.Infrastructure.Services;
 
-public class AuthService
+public class AuthService: IAuthService
 {
     private readonly IConfiguration _config;
 
-    public AuthService(IConfiguration config) => _config = config;
+    public AuthService(IConfiguration config)
+    {
+        _config = config;
+    }
 
-    public string GenearateToken(User user)
+    public string GenearateJwtToken(User user)
     {
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -37,5 +40,4 @@ public class AuthService
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
-
 }

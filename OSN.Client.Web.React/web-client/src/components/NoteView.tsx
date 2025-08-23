@@ -155,9 +155,9 @@ export default function NoteView() {
 
     const saveNote: SaveNoteFunction = useCallback(async (updates) => {
         if (!noteId) return;
-        
+        updates.id = noteId
         try {
-            await api.put(`/note/${noteId}`, updates);
+            await api.put(`/note`, updates);
             isLocalChange.current = true;  // Mark this as a local change
             onUpdateNote?.(noteId, updates);
             setSyncState('saved');

@@ -1,15 +1,17 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
+using OSN.Application.Services;
 
 namespace OSN.Infrastructure.Services;
-public class PasswordHasher
+
+public class PasswordHasherSHA256 : IPasswordHasher
 {
-    public bool VerifySHA256Password(string hashedPassword, string inputPassword)
+    public bool VerifyPassword(string hashedPassword, string inputPassword)
     {
         var inputHash = Convert.ToBase64String(SHA256.HashData(Encoding.UTF8.GetBytes(inputPassword)));
         return hashedPassword == inputHash;
     }
-    public string HashSHA256Password(string password)
+    public string HashPassword(string password)
     {
         return Convert.ToBase64String(SHA256.HashData(Encoding.UTF8.GetBytes(password)));
     }

@@ -1,27 +1,30 @@
 ﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
-using OSN.Infrastructure;
+using OSN.Application.Repositories;
+using OSN.Application.Services;
 
 namespace OSN.Application.Features.Notes.Get;
 
 public class GetNoteByIdQueryHandler : IRequestHandler<GetNoteByIdQuery, Result<NoteResponse>>
 {
-    private readonly AppDbContext _db; // TODO: replace with repository
+    private readonly INoteRepository _noteRepository;
     private readonly ICurrentUserService _currentUser;
 
-    public GetNoteByIdQueryHandler(AppDbContext db, ICurrentUserService currentUser)
+    public GetNoteByIdQueryHandler(INoteRepository noteRepository, ICurrentUserService currentUser)
     {
-        _db = db;
+        _noteRepository = noteRepository;
         _currentUser = currentUser;
     }
 
     public async Task<Result<NoteResponse>> Handle(GetNoteByIdQuery query, CancellationToken ct)
     {
-        var note = await _db.Notes
-            .Where(n => n.Id == query.Id && n.UserId == _currentUser.UserId && !n.IsDeleted)
-            .Select(n => new NoteResponse(n.Id, n.Title, n.Content, n.IsPinned, n.CreatedAt, n.UpdatedAt))
-            .FirstOrDefaultAsync(ct) ?? throw new NotFoundException("Note not found.");
+        var note = await _noteRepository.GetByIdAsync(query.Id, _currentUser.UserId, ct);
+        if (note == null)
+        {
+            return Result<NoteResponse>.Failure("Note not found.");
+        }
 
-        return Result<NoteResponse>.Success(note);
+        return Result<NoteResponse>.Success(
+            new NoteResponse(note.Id, note.Title, note.Content, note.IsPinned, note.CreatedAt, note.UpdatedAt)
+        );
     }
 }

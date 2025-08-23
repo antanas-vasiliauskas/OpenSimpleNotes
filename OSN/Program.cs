@@ -1,4 +1,3 @@
-using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -6,20 +5,14 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using OSN.Application;
 using OSN.Application.Features.Auth.Login;
-using OSN.Domain.Models;
+using OSN.Application.Repositories;
+using OSN.Application.Services;
+using OSN.Domain.Core;
 using OSN.Infrastructure;
+using OSN.Infrastructure.Repositories;
 using OSN.Infrastructure.Services;
 using System.Text;
 using System.Threading.RateLimiting;
-
-// SuperUser
-// Alexander_Stoltenberg31@hotmail.com
-
-// Admin
-// Reanna.Runte@hotmail.com
-
-// User
-// Verona_Yundt@hotmail.com
 
 namespace OSN;
 
@@ -102,9 +95,6 @@ public class Program
         });
 
 
-
-
-
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
@@ -144,18 +134,24 @@ public class Program
         });
 
         // Doesn't pickup automatically.
-        builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(AuthorizationBehavior<,>));
+        //builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(AuthorizationBehavior<,>));
 
 
 
-        builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-        builder.Services.AddScoped<AuthService>();
-        builder.Services.AddScoped<PasswordHasher>();
-        builder.Services.AddScoped<GoogleOAuth2Service>();
-        builder.Services.AddScoped<EmailService>();
+        builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Scoped);
+        builder.Services.AddScoped<IAuthService, AuthService>();
+        builder.Services.AddScoped<IPasswordHasher, PasswordHasherSHA256>();
+        builder.Services.AddScoped<IGoogleOAuth2Service, GoogleOAuth2Service>();
+        builder.Services.AddScoped<IEmailService, EmailService>();
+        builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+
         builder.Services.AddHttpClient<GoogleOAuth2Service>();
         builder.Services.AddHttpContextAccessor();
-        builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+
+        builder.Services.AddScoped<IUserRepository, UserRepository>();
+        builder.Services.AddScoped<IPendingVerificationRepository, PendingVerificationRepository>();
+        builder.Services.AddScoped<IGoogleSignInFieldsRepository, GoogleSignInFieldsRepository>();
+        builder.Services.AddScoped<INoteRepository, NoteRepository>();
 
         builder.Services.AddCors(options => {
             options.AddPolicy("AllowSpecificOrigins", policyBuilder => {
@@ -187,7 +183,6 @@ public class Program
         #region Configure
 
         app.UseCors("AllowSpecificOrigins");
-        app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 
         app.UseRateLimiter();
@@ -210,7 +205,7 @@ public class Program
         {
             var services = scope.ServiceProvider;
             var context = services.GetRequiredService<AppDbContext>();
-            var passwordHasher = services.GetRequiredService<PasswordHasher>();
+            var passwordHasher = services.GetRequiredService<IPasswordHasher>();
             if (app.Environment.IsDevelopment())
             {
                 context.Database.Migrate();

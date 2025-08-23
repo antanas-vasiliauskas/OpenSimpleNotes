@@ -1,6 +1,4 @@
 using MediatR;
 
 namespace OSN.Application.Features.Auth.AnonymousLogin;
-
-[AllowAnonymousCommand]
-public record AnonymousLoginCommand(AnonymousLoginRequest Request) : IRequest<Result<AnonymousLoginResponse>>;
+public record AnonymousLoginCommand(Guid? GuestId) : IRequest<Result<AnonymousLoginResponse>>;

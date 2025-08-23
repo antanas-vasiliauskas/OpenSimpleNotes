@@ -1,6 +1,4 @@
 using MediatR;
 
 namespace OSN.Application.Features.Auth.Register;
-
-[AllowAnonymousCommand]
-public record RegisterCommand(RegisterRequest Request) : IRequest<Result<RegisterResponse>>;
+public record RegisterCommand(string Email, string Password) : IRequest<Result<RegisterResponse>>;

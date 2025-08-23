@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using OSN.Application.Repositories;
 using OSN.Domain.Models;
 using OSN.Domain.ValueObjects;
 using OSN.Infrastructure.ValueConverters;
 
 namespace OSN.Infrastructure;
 
-public class AppDbContext : DbContext
+public class AppDbContext : DbContext, IUnitOfWork
 {
     // migration commands:
     // dotnet ef migrations add <MigrationName> --project ..\OSN.Infrastructure\OSN.Infrastructure.csproj --startup-project .\OSN.csproj

@@ -1,6 +1,4 @@
 using MediatR;
 
 namespace OSN.Application.Features.Auth.Verify;
-
-[AllowAnonymousCommand]
-public record VerifyEmailCommand(VerifyEmailRequest Request) : IRequest<Result<VerifyEmailResponse>>;
+public record VerifyEmailCommand(string Email, string VerificationCode) : IRequest<Result<VerifyEmailResponse>>;

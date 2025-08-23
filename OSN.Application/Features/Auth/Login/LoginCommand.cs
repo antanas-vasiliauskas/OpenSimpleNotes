@@ -1,6 +1,4 @@
 ﻿using MediatR;
 
 namespace OSN.Application.Features.Auth.Login;
-
-[AllowAnonymousCommand]
-public record LoginCommand(LoginRequest Request) : IRequest<Result<LoginResponse>>;
+public record LoginCommand(string Email, string Password) : IRequest<Result<LoginResponse>>;

@@ -1,6 +1,5 @@
 ﻿using MediatR;
 
 namespace OSN.Application.Features.Notes.Update;
-
-[AuthorizeCommand(Policy = RoleHierarchy.GuestPolicy)]
-public record UpdateNoteCommand(Guid Id, UpdateNoteRequest Request) : IRequest<Result<NoteResponse>>;
+public record UpdateNoteCommand(Guid Id, string? Title, string? Content, bool? IsPinned) 
+    : IRequest<Result<NoteResponse>>;
