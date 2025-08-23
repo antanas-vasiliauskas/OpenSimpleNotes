@@ -11,6 +11,7 @@ using OSN.Domain.Core;
 using OSN.Infrastructure;
 using OSN.Infrastructure.Repositories;
 using OSN.Infrastructure.Services;
+using OSN.Middleware;
 using System.Text;
 using System.Threading.RateLimiting;
 
@@ -24,6 +25,11 @@ public class Program
         #region ConfigureServices
 
         var builder = WebApplication.CreateBuilder(args);
+
+        builder.WebHost.UseSentry();
+        builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+        builder.Services.AddProblemDetails();
+        
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(c =>
@@ -182,6 +188,8 @@ public class Program
 
         #region Configure
 
+        app.UseExceptionHandler();
+        
         app.UseCors("AllowSpecificOrigins");
 
 
@@ -221,7 +229,6 @@ public class Program
         app.MapControllers();
 
         app.Run();
-
         #endregion
     }
 }

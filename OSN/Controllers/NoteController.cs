@@ -9,7 +9,7 @@ using OSN.Application.Features.Notes.GetAll;
 using OSN.Application.Features.Notes.Update;
 using OSN.Domain.Core;
 
-namespace OSN;
+namespace OSN.Controllers;
 
 [ApiController]
 [Authorize(Policy = RoleHierarchy.GuestPolicy)]

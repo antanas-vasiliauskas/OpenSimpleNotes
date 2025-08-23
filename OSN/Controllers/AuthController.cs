@@ -9,7 +9,7 @@ using OSN.Application.Features.Auth.AnonymousLogin;
 using OSN.Application.Features.Auth.Verify;
 using OSN.Application.Features.Auth.VerifyResend;
 
-namespace OSN;
+namespace OSN.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]

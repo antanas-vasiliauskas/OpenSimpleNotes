@@ -3,11 +3,11 @@
 **/ServiceDependencies/
 
 
-## Production secrets - DO NOT COMMIT
+## Contains secrets
+appsettings.json
 appsettings.Production.json
-
-## Contains OAuth secrets, don't commit as well
 appsettings.Development.json
+appsettings.Testing.json
 
 ## .NET build artifacts
 **/bin/
