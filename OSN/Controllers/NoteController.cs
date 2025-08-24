@@ -33,8 +33,9 @@ public class NoteController: ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<NoteResponse>> GetById(GetNoteByIdQuery command)
+    public async Task<ActionResult<NoteResponse>> GetById(Guid id)
     {
+        var command = new GetNoteByIdQuery(id);
         var result = await _mediator.Send(command);
         if (!result.IsSuccess)
             return BadRequest(new { message = result.Error });
@@ -59,9 +60,10 @@ public class NoteController: ControllerBase
         return Ok(result.Value);
     }
 
-    [HttpDelete]
-    public async Task<IActionResult> Delete(DeleteNoteCommand command)
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(Guid id)
     {
+        var command = new DeleteNoteCommand(id);
         var result = await _mediator.Send(command);
         if (!result.IsSuccess)
             return BadRequest(new { message = result.Error });

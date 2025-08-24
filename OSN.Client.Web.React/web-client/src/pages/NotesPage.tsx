@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Box, styled } from '@mui/material';
 import { Note } from '../types/notes';
 import { Outlet, useNavigate } from 'react-router-dom';
-import api from '../api/client';
+import { noteGetAll, noteCreate, noteDelete } from '../api/client';
 import { isTokenExpired } from '../utils/auth';
 import Sidebar from '../components/Sidebar';
 
@@ -52,7 +52,7 @@ export default function NotesPage({ onLogout }: NotesPageProps) {
 
     const loadNotes = async () => {
         try {
-            const { data } = await api.get('/note');
+            const data = await noteGetAll();
             setNotes(data);
         } catch (error) {
             console.error('Failed to load notes:', error);
@@ -62,7 +62,7 @@ export default function NotesPage({ onLogout }: NotesPageProps) {
 
     const handleCreateNote = async () => {
         try {
-            const { data } = await api.post('/note', {
+            const data = await noteCreate({
                 title: 'New note',
                 content: ''
             });
@@ -75,8 +75,7 @@ export default function NotesPage({ onLogout }: NotesPageProps) {
 
     const handleDeleteNote = async (noteId: string) => {
         try {
-            var body = { id: noteId };
-            await api.delete(`/note`, { data: body });
+            await noteDelete(noteId);
             setNotes(prev => prev.filter(note => note.id !== noteId));
         } catch (error) {
             console.error('Failed to delete note:', error);

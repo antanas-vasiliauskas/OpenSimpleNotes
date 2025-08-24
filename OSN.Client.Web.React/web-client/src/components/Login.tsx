@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, TextField, Box, Typography, Divider, Alert } from '@mui/material';
-import api from '../api/client';
+import { authLogin } from '../api/client';
 import LandingPresentation from './LandingPresentation';
 import GuestLoginButton from './GuestLoginButton';
 import GoogleSignInButton from './GoogleSignInButton';
@@ -17,8 +17,7 @@ export default function Login({ onLogin }: { onLogin: () => void }) {
         setError('');
         
         try {
-            const response = await api.post('auth/login', credentials);
-            const {token, role} = response.data;
+            const {token, role} = await authLogin(credentials);
             localStorage.setItem('token', token);
             localStorage.setItem('userRole', role);
             onLogin();

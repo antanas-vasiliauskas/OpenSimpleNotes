@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Button } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
-import api from '../api/client';
+import { authAnonymousLogin } from '../api/client';
 
 interface GuestLoginButtonProps {
     onLogin: () => void;
@@ -24,8 +24,7 @@ export default function GuestLoginButton({ onLogin, disabled = false, onError }:
                 payload.GuestId = existingGuestId;
             }
 
-            const response = await api.post('auth/anonymous-login', payload);
-            const { token, role, guestId } = response.data;
+            const { token, role, guestId } = await authAnonymousLogin(payload);
             
             // Store the authentication data
             localStorage.setItem('token', token);

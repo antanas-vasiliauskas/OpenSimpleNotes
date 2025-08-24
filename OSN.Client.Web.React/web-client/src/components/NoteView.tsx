@@ -4,7 +4,7 @@ import { useParams, useOutletContext } from 'react-router-dom';
 import { Note } from '../types/notes';
 import { useDebounce } from '../hooks/useDebounce';
 import { Sync as SyncIcon, CheckCircle as CheckCircleIcon } from '@mui/icons-material';
-import api from '../api/client';
+import { noteUpdate } from '../api/client';
 
 interface NoteContextType {
     notes: Note[];
@@ -157,7 +157,7 @@ export default function NoteView() {
         if (!noteId) return;
         updates.id = noteId
         try {
-            await api.put(`/note`, updates);
+            await noteUpdate(updates);
             isLocalChange.current = true;  // Mark this as a local change
             onUpdateNote?.(noteId, updates);
             setSyncState('saved');
