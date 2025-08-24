@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button, TextField, Box, Typography, Divider, Alert } from '@mui/material';
-import { authRegister } from '../api/client';
+import api from '../api/client';
 import LandingPresentation from './LandingPresentation';
 import GuestLoginButton from './GuestLoginButton';
 import GoogleSignInButton from './GoogleSignInButton';
@@ -28,7 +28,7 @@ export default function Register({ onRegister }: { onRegister: () => void }) {
         setError('');
         
         try {
-            const { message } = await authRegister({
+            const { message } = await api.auth.register({
                 email: formData.email,
                 password: formData.password
             });

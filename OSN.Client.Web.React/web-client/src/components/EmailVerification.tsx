@@ -10,7 +10,7 @@ import {
     InputAdornment
 } from '@mui/material';
 import { Email, Lock } from '@mui/icons-material';
-import { authVerify, authVerifyResend } from '../api/client';
+import api from '../api/client';
 import LandingPresentation from './LandingPresentation';
 
 interface LocationState {
@@ -59,7 +59,7 @@ export default function EmailVerification({ onVerify }: { onVerify: () => void }
         setError('');
         
         try {
-            const data = await authVerify({
+            const data = await api.auth.verify({
                 email: email,
                 verificationCode: verificationCode
             });
@@ -80,7 +80,7 @@ export default function EmailVerification({ onVerify }: { onVerify: () => void }
         setSuccessMessage('');
         
         try {
-            await authVerifyResend({ email: email });
+            await api.auth.verifyResend({ email: email });
             setSuccessMessage('Verification code sent! Please check your email.');
             setResendCooldown(60); // 60 second cooldown
         } catch (error: any) {

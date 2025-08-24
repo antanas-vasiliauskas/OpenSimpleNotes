@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Button, Box } from '@mui/material';
-import { authGoogleSignin } from '../api/client';
+import api from '../api/client';
 import { initGoogleAuth, promptGoogleSignIn } from '../utils/googleAuth';
 
 interface GoogleSignInButtonProps {
@@ -22,7 +22,7 @@ export default function GoogleSignInButton({
         setLoading(true);
         
         try {
-            const { token, role } = await authGoogleSignin({
+            const { token, role } = await api.auth.googleSignin({
                 AuthorizationCode: authorizationCode,
                 RedirectUri: `${window.location.origin}/oauth-callback.html`
             });
