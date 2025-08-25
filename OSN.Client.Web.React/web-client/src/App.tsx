@@ -1,12 +1,17 @@
 import { Box, CssBaseline } from '@mui/material';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { ToastProvider } from './context/ToastContext';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import EmailVerificationPage from './pages/EmailVerificationPage';
 import NotesPage from './pages/NotesPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import NoteView from './components/NoteView';
+import ErrorBoundary from './components/ErrorBoundary';
+import { initSentry } from './utils/sentry';
+
+initSentry();
 
 function AppRoutes() {
     const { isAuthenticated, login, logout } = useAuth();
@@ -38,10 +43,14 @@ function AppRoutes() {
 
 export default function App() {
     return (
-        <BrowserRouter>
-            <AuthProvider>
-                <AppRoutes />
-            </AuthProvider>
-        </BrowserRouter>
+        <ToastProvider>
+            <ErrorBoundary>
+                <BrowserRouter>
+                    <AuthProvider>
+                        <AppRoutes />
+                    </AuthProvider>
+                </BrowserRouter>
+            </ErrorBoundary>
+        </ToastProvider>
     );
 }
