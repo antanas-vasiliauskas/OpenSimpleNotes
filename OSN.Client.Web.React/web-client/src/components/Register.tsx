@@ -170,6 +170,19 @@ export default function Register({ onRegister }: { onRegister: () => void }) {
                                 Sign in
                             </Link>
                         </Typography>
+                        
+                        <Typography variant="caption" align="center" sx={{ mt: 2, color: 'text.secondary' }}>
+                            By creating an account, you agree to our{' '}
+                            <Link 
+                                to="/privacy-policy" 
+                                style={{ 
+                                    color: '#1976d2', 
+                                    textDecoration: 'none'
+                                }}
+                            >
+                                Privacy Policy
+                            </Link>
+                        </Typography>
                     </Box>
                 </Box>
             </Box>

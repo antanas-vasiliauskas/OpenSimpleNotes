@@ -6,6 +6,8 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import EmailVerificationPage from './pages/EmailVerificationPage';
 import NotesPage from './pages/NotesPage';
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
+import AccountDeletionPage from './pages/AccountDeletionPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import NoteView from './components/NoteView';
 import ErrorBoundary from './components/ErrorBoundary';
@@ -29,6 +31,8 @@ function AppRoutes() {
                 <Route path="/verify-email" element={
                     <EmailVerificationPage isAuthenticated={isAuthenticated} onVerify={login} />
                 } />
+                <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+                <Route path="/delete-account" element={<AccountDeletionPage />} />
                 <Route element={<ProtectedRoute isAuthenticated={isAuthenticated} />}>
                     <Route path="/" element={<NotesPage onLogout={logout} />}>
                         <Route index element={<NoteView />} />

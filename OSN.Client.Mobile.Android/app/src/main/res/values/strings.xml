@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Open Simple Notes</string>
+    <!-- IMPORTANT! Has to be Web (Production) Client Id! -->
+    <string name="google_client_id">71552770910-pkaprf39vvo1nq3ltc3cd4ti4mfr0cfj.apps.googleusercontent.com</string>
+</resources>

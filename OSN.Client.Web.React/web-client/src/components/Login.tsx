@@ -142,6 +142,19 @@ export default function Login({ onLogin }: { onLogin: () => void }) {
                                 Register now
                             </Link>
                         </Typography>
+                        
+                        <Typography variant="caption" align="center" sx={{ mt: 2, color: 'text.secondary' }}>
+                            By signing in, you agree to our{' '}
+                            <Link 
+                                to="/privacy-policy" 
+                                style={{ 
+                                    color: '#1976d2', 
+                                    textDecoration: 'none'
+                                }}
+                            >
+                                Privacy Policy
+                            </Link>
+                        </Typography>
                     </Box>
                 </Box>
             </Box>

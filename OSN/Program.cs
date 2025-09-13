@@ -125,7 +125,7 @@ public class Program
                     policy.RequireRole(allowedRoles));
             }
             // Set fallback policy to be DefaultPolicy (UserPolicy)
-            // Fallback policy applied if there is [Authorize] attribute without arguments or nothing at all.
+            // Fallback policy applied if there is [Authorize] attribute with no arguments or nothing at all.
             options.FallbackPolicy = new AuthorizationPolicyBuilder()
                 .RequireAuthenticatedUser()
                 .RequireRole(RoleHierarchy._hierarchy[RoleHierarchy.DefaultPolicy])
@@ -160,26 +160,32 @@ public class Program
         builder.Services.AddScoped<INoteRepository, NoteRepository>();
 
         builder.Services.AddCors(options => {
-            options.AddPolicy("AllowSpecificOrigins", policyBuilder => {
-                if (builder.Environment.IsDevelopment())
-                {
-                    policyBuilder.WithOrigins(
-                        "http://localhost:3000",
-                        "https://localhost:3000",
-                        "https://black-field-0f7ce1903.2.azurestaticapps.net",
-                        "https://opensimplenotes.com"
-                    );
-                }
-                else
-                {
-                    policyBuilder.WithOrigins(
-                        "https://black-field-0f7ce1903.2.azurestaticapps.net",
-                        "https://opensimplenotes.com"
-                    );
-                }
+            options.AddPolicy("AllowAllOrigins", policyBuilder => {
                 policyBuilder
                     .AllowAnyMethod()
-                    .AllowAnyHeader();
+                    .AllowAnyHeader()
+                    .AllowAnyOrigin(); // remove this option when setting up stricter origins.
+
+                // Stricter CORS configuration (commented out):
+                // if (builder.Environment.IsDevelopment())
+                // {
+                //     policyBuilder.WithOrigins(
+                //         "http://localhost:3000",
+                //         "https://localhost:3000",
+                //         "https://black-field-0f7ce1903.2.azurestaticapps.net",
+                //         "https://opensimplenotes.com"
+                //     );
+                // }
+                // else
+                // {
+                //     policyBuilder.WithOrigins(
+                //         "https://black-field-0f7ce1903.2.azurestaticapps.net",
+                //         "https://opensimplenotes.com"
+                //     );
+                // }
+                // policyBuilder
+                //     .AllowAnyMethod()
+                //     .AllowAnyHeader();
             });
         });
         var app = builder.Build();
@@ -190,8 +196,8 @@ public class Program
 
         app.UseExceptionHandler();
         
-        app.UseCors("AllowSpecificOrigins");
-
+        app.UseCors("AllowAllOrigins");
+        //app.UseCors("AllowSpecificOrigins");
 
         app.UseRateLimiter();
 
